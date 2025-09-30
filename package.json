@@ -1,0 +1,21 @@
+{
+  "name": "hackathonpoc",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "tsx": "^4.20.6"
+  }
+}
