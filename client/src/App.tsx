@@ -8,7 +8,8 @@ import {
 import "@xyflow/react/dist/style.css";
 import ViewTitle from "./components/ViewTitle";
 
-const { nodes: initialNodes, edges, title } = window.GRAPH_DATA;
+const { nodes: initialNodes, edges, title } = window.GRAPH_DATA.graph;
+const metadata = window.GRAPH_DATA.metadata;
 
 function App() {
   const [nodes, setNodes] = useState(initialNodes);
@@ -21,13 +22,14 @@ function App() {
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <ViewTitle title={title} />
+      <ViewTitle title={title} metadata={metadata} />
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
           fitView
+          edgesFocusable={true}
         />
       </ReactFlowProvider>
     </div>

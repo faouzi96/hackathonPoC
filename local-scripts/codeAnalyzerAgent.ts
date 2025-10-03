@@ -12,6 +12,7 @@ import {
   systemContentAnalyserMessage,
   systemMessage,
 } from "../globals/systemMessage";
+import { getProjectDescription } from "./projectDescriberAgent";
 
 const mcpClient = new Client(
   {
@@ -109,14 +110,10 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
   return finalText.join("\n");
 }
 
-export async function localMcpClientCodeAnalyser() {
-  const ignorePatterns = ["node_modules", ".*", "temp*", ".env"];
-
-  // go through the files load their paths into the context.
-  const uri = await input({
-    message: "Please insert the absolute path for your project files",
-  });
-
+export async function localMcpClientCodeAnalyser(
+  uri: string,
+  ignorePatterns: string[]
+) {
   const files = (await getAllFilePaths(uri, ignorePatterns)).join("\n");
   const fileContext = `\n\nList of the files:
   \n${files}`;
@@ -152,7 +149,12 @@ async function getAllFilePaths(
       const fullPath = join(currentPath, name);
 
       // Skip hidden files/folders and user-defined patterns
-      if (ignorePatterns.some((pattern) => minimatch(name, pattern))) {
+      if (
+        ignorePatterns.some((pattern) => {
+          // Check if the full path or just the name matches any ignore pattern
+          return fullPath.includes(pattern.replace("/", "").replace('"', ""));
+        })
+      ) {
         continue;
       }
 

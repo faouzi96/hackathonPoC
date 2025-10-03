@@ -3,9 +3,12 @@ export {};
 declare global {
   interface Window {
     GRAPH_DATA: {
-      title: string;
-      nodes: any[];
-      edges: any[];
+      metadata: any;
+      graph: {
+        title: string;
+        nodes: any[];
+        edges: any[];
+      };
     };
   }
 }
