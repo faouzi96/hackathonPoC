@@ -16,8 +16,8 @@ After analyzing all files, return a structured schema representing the project a
   title:"project name/title",
   nodes:[
     {id:"n1",position:{x:0,y:0},data:{label:"class 1"}},
-    {id:"n2",position:{x:100, y:100 },data:{label:"class 2"}},
-    {id:"n3",position:{x:-100, y:100 },data:{label:"interface 1"}},
+    {id:"n2",position:{x:100,y:100},data:{label:"class 2"}},
+    {id:"n3",position:{x:-100,y:100},data:{label:"interface 1"}},
   ],
   edges:[
     {id:"n1-n2",source:"n1",target:"n2",label:"inheritance"},
