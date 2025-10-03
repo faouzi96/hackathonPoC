@@ -20,9 +20,9 @@ async function main() {
 
   if (env === "Local") response = await localMcpClient();
   //  if (env === "Github")
-
   writeFileSync(publicPath, JSON.stringify(JSON.parse(response), null, 2));
 
+  console.log("UI Development Server Running on: http://localhost:3000");
   exec(
     "npm run dev",
     { cwd: path.join(__dirname, "client") },
@@ -31,7 +31,6 @@ async function main() {
         console.error("❌ Failed to start React app:", err);
         return;
       }
-      console.log("UI Development Server Running on: http://localhost:3000");
     }
   );
 }

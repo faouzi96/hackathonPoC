@@ -7,7 +7,7 @@
     "build": "tsc",
     "dev": "tsx main.ts",
     "mcp:server:dev": "tsx local-scripts/mcp-server.ts",
-    "mcp:server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run server:dev",
+    "mcp:server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run mcp:server:dev",
     "mcp:client:dev": "tsx local-scripts/agent.ts"
   },
   "keywords": [],
@@ -24,12 +24,10 @@
     "@modelcontextprotocol/inspector": "^0.16.8",
     "@modelcontextprotocol/sdk": "^1.18.2",
     "ai": "^5.0.59",
-    "ai-sdk-ollama": "^0.10.1",
     "dotenv": "^17.2.3",
     "minimatch": "^10.0.3",
     "octokit": "^5.0.3",
-    "ollama-ai-provider-v2": "^1.4.1",
     "tsx": "^4.20.6",
-    "zod": "^4.1.11"
+    "zod": "^3.25.76"
   }
 }
