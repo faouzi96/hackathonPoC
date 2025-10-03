@@ -1,5 +1,5 @@
 {
-  "title": "Sample Data",
+  "title": "github-local-mcp",
   "nodes": [
     {
       "id": "n1",
@@ -8,27 +8,137 @@
         "y": 0
       },
       "data": {
-        "label": "Node 1"
+        "label": "App (React Component)"
       }
     },
     {
       "id": "n2",
       "position": {
-        "x": 100,
-        "y": 100
+        "x": 200,
+        "y": 0
       },
       "data": {
-        "label": "Node 2"
+        "label": "ViewTitle (React Component)"
       }
     },
     {
       "id": "n3",
       "position": {
-        "x": -100,
-        "y": 100
+        "x": 0,
+        "y": 120
       },
       "data": {
-        "label": "Node 3"
+        "label": "MainEntry (React StrictMode Wrapper)"
+      }
+    },
+    {
+      "id": "n4",
+      "position": {
+        "x": 0,
+        "y": 240
+      },
+      "data": {
+        "label": "localMcpClient (function)"
+      }
+    },
+    {
+      "id": "n5",
+      "position": {
+        "x": 300,
+        "y": 240
+      },
+      "data": {
+        "label": "queryProcessing (function)"
+      }
+    },
+    {
+      "id": "n6",
+      "position": {
+        "x": 600,
+        "y": 240
+      },
+      "data": {
+        "label": "mcpClient (Client instance)"
+      }
+    },
+    {
+      "id": "n7",
+      "position": {
+        "x": 900,
+        "y": 240
+      },
+      "data": {
+        "label": "StdioClientTransport (class)"
+      }
+    },
+    {
+      "id": "n8",
+      "position": {
+        "x": 0,
+        "y": 360
+      },
+      "data": {
+        "label": "McpServer (class)"
+      }
+    },
+    {
+      "id": "n9",
+      "position": {
+        "x": 300,
+        "y": 360
+      },
+      "data": {
+        "label": "StdioServerTransport (class)"
+      }
+    },
+    {
+      "id": "n10",
+      "position": {
+        "x": 600,
+        "y": 360
+      },
+      "data": {
+        "label": "Server Tool: get-file-content (tool function)"
+      }
+    },
+    {
+      "id": "n11",
+      "position": {
+        "x": 900,
+        "y": 360
+      },
+      "data": {
+        "label": "loadFileContent (function)"
+      }
+    },
+    {
+      "id": "n12",
+      "position": {
+        "x": 0,
+        "y": 480
+      },
+      "data": {
+        "label": "main (server start function)"
+      }
+    },
+    {
+      "id": "n13",
+      "position": {
+        "x": 0,
+        "y": 600
+      },
+      "data": {
+        "label": "ClientScript Main (function)"
+      }
+    },
+    {
+      "id": "n14",
+      "position": {
+        "x": 300,
+        "y": 600
+      },
+      "data": {
+        "label": "jsonData (graph data)"
       }
     }
   ],
@@ -36,12 +146,68 @@
     {
       "id": "n1-n2",
       "source": "n1",
-      "target": "n2"
+      "target": "n2",
+      "label": "uses"
     },
     {
-      "id": "n1-n3",
-      "source": "n1",
-      "target": "n3"
+      "id": "n3-n1",
+      "source": "n3",
+      "target": "n1",
+      "label": "renders"
+    },
+    {
+      "id": "n4-n5",
+      "source": "n4",
+      "target": "n5",
+      "label": "calls"
+    },
+    {
+      "id": "n4-n6",
+      "source": "n4",
+      "target": "n6",
+      "label": "uses"
+    },
+    {
+      "id": "n6-n7",
+      "source": "n6",
+      "target": "n7",
+      "label": "composed-with"
+    },
+    {
+      "id": "n8-n9",
+      "source": "n8",
+      "target": "n9",
+      "label": "composed-with"
+    },
+    {
+      "id": "n8-n10",
+      "source": "n8",
+      "target": "n10",
+      "label": "defines tool"
+    },
+    {
+      "id": "n10-n11",
+      "source": "n10",
+      "target": "n11",
+      "label": "uses"
+    },
+    {
+      "id": "n12-n8",
+      "source": "n12",
+      "target": "n8",
+      "label": "initializes"
+    },
+    {
+      "id": "n13-n4",
+      "source": "n13",
+      "target": "n4",
+      "label": "calls"
+    },
+    {
+      "id": "n13-n14",
+      "source": "n13",
+      "target": "n14",
+      "label": "uses"
     }
   ]
 }

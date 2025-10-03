@@ -1,36 +1,39 @@
+import { input, select } from "@inquirer/prompts";
 import { exec } from "child_process";
 import { writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { localMcpClient } from "./local-scripts/agent";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const publicPath = path.join(__dirname, "client", "public", "data.json");
 
-const jsonData = {
-  title: "Sample Data",
-  nodes: [
-    { id: "n1", position: { x: 0, y: 0 }, data: { label: "Node 1" } },
-    { id: "n2", position: { x: 100, y: 100 }, data: { label: "Node 2" } },
-    { id: "n3", position: { x: -100, y: 100 }, data: { label: "Node 3" } },
-  ],
-  edges: [
-    { id: "n1-n2", source: "n1", target: "n2" },
-    { id: "n1-n3", source: "n1", target: "n3" },
-  ],
-};
+async function main() {
+  const env = await select({
+    message: "Choose your project environment!",
+    choices: ["Local", "Github"],
+  });
 
-writeFileSync(publicPath, JSON.stringify(jsonData, null, 2));
+  let response: string = "";
 
-exec(
-  "npm run dev",
-  { cwd: path.join(__dirname, "client") },
-  (err, stdout, stderr) => {
-    if (err) {
-      console.error("❌ Failed to start React app:", err);
-      return;
+  if (env === "Local") response = await localMcpClient();
+  //  if (env === "Github")
+
+  writeFileSync(publicPath, JSON.stringify(JSON.parse(response), null, 2));
+
+  exec(
+    "npm run dev",
+    { cwd: path.join(__dirname, "client") },
+    (err, stdout, stderr) => {
+      if (err) {
+        console.error("❌ Failed to start React app:", err);
+        return;
+      }
+      console.log("UI Development Server Running on: http://localhost:3000");
     }
-    console.log(stdout);
-  }
-);
+  );
+}
+
+main();
