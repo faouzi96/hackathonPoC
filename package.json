@@ -2,13 +2,12 @@
   "name": "hackathonpoc",
   "version": "1.0.0",
   "type": "module",
-  "main": "main.js",
+  "main": "orchestrator.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx main.ts",
+    "dev": "tsx orchestrator.ts",
     "mcp:server:dev": "tsx local-scripts/mcp-server.ts",
-    "mcp:server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run mcp:server:dev",
-    "mcp:client:dev": "tsx local-scripts/agent.ts"
+    "mcp:server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run mcp:server:dev"
   },
   "keywords": [],
   "author": "",

@@ -3,7 +3,13 @@ import "dotenv/config";
 import { generateText, ModelMessage } from "ai";
 import { systemDescriberMessage } from "../globals/systemMessage";
 import { readdir } from "node:fs/promises";
-import { join, resolve } from "node:path";
+
+export type Metadata = {
+  projectType: string;
+  framework: string;
+  ignorePatterns: string[];
+  description: string;
+};
 
 const azure = createAzure({
   apiKey: process.env.AZURE_AI_KEY,
@@ -23,7 +29,7 @@ async function queryProcessing(messages: ModelMessage[]) {
     : "";
 }
 
-export async function getProjectDescription(uri: string) {
+export async function getProjectDescription(uri: string): Promise<Metadata> {
   const files = (await getAllFilePaths(uri)).join("\n");
   const fileContext = `\n\nList of the files:
       \n${files}`;
@@ -35,7 +41,7 @@ export async function getProjectDescription(uri: string) {
   ];
 
   const response = await queryProcessing(messages);
-  return JSON.parse(response);
+  return JSON.parse(response) as Metadata;
 }
 
 async function getAllFilePaths(folderPath: string) {

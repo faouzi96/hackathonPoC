@@ -12,7 +12,7 @@ import {
   systemContentAnalyserMessage,
   systemMessage,
 } from "../globals/systemMessage";
-import { getProjectDescription } from "./projectDescriberAgent";
+import { getProjectDescription, Metadata } from "./projectDescriberAgent";
 
 const mcpClient = new Client(
   {
@@ -112,11 +112,16 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
 
 export async function localMcpClientCodeAnalyser(
   uri: string,
-  ignorePatterns: string[]
+  metadata: Metadata
 ) {
-  const files = (await getAllFilePaths(uri, ignorePatterns)).join("\n");
+  const files = (await getAllFilePaths(uri, metadata.ignorePatterns)).join(
+    "\n"
+  );
   const fileContext = `\n\nList of the files:
   \n${files}`;
+
+  const description = `\nConsider the following project description given by analyzing the project files:
+\n ${metadata.description}`;
 
   await mcpClient.connect(transport);
 
@@ -125,7 +130,7 @@ export async function localMcpClientCodeAnalyser(
   const messages: ModelMessage[] = [
     {
       role: "system",
-      content: systemContentAnalyserMessage + fileContext,
+      content: systemContentAnalyserMessage + fileContext + description,
     },
   ];
 
