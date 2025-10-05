@@ -1,7 +1,7 @@
 import { createAzure } from "@ai-sdk/azure";
 import "dotenv/config";
 import { generateText, ModelMessage } from "ai";
-import { systemDescriberMessage } from "../globals/systemMessage";
+import { systemDescriberMessage } from "../globals/systemMessage.js";
 import { readdir } from "node:fs/promises";
 
 export type Metadata = {

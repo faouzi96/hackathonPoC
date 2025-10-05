@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { Node } from "@xyflow/react";
+import icon from "../assets/flow.svg";
 
 type Props = {
   nodes: Node[];
@@ -18,7 +19,7 @@ export default function NodeSelector({
   selectedId,
   onSelect,
   onClear,
-  placeholder = "Search nodes…",
+  placeholder = "Nodes Filter…",
 }: Props) {
   const [q, setQ] = useState("");
 
@@ -47,9 +48,20 @@ export default function NodeSelector({
           textTransform: "uppercase",
           borderBottom: "1px solid #00000020",
           paddingBottom: 6,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
         }}
       >
-        Nodes Filter
+        <img
+          src={icon}
+          alt="Flow Icon"
+          style={{
+            height: 35,
+          }}
+        />
+        <p>Flow Analyzer</p>
       </div>
 
       <input

@@ -1,4 +1,3 @@
-import { minimatch } from "minimatch";
 import { createAzure } from "@ai-sdk/azure";
 import { Client } from "@modelcontextprotocol/sdk/client";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
@@ -6,13 +5,9 @@ import { Tool } from "@modelcontextprotocol/sdk/types.js";
 import "dotenv/config";
 import { generateText, jsonSchema, ModelMessage, tool } from "ai";
 import { readdir } from "fs/promises";
-import { input } from "@inquirer/prompts";
 import { join, resolve } from "path";
-import {
-  systemContentAnalyserMessage,
-  systemMessage,
-} from "../globals/systemMessage";
-import { getProjectDescription, Metadata } from "./projectDescriberAgent";
+import { systemContentAnalyserMessage } from "../globals/systemMessage.js";
+import { Metadata } from "./projectDescriberAgent.js";
 
 const mcpClient = new Client(
   {

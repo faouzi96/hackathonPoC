@@ -1,7 +1,7 @@
 import { createAzure } from "@ai-sdk/azure";
 import "dotenv/config";
 import { generateText, ModelMessage } from "ai";
-import { systemMessage } from "../globals/systemMessage";
+import { systemMessage } from "../globals/systemMessage.js";
 
 const azure = createAzure({
   apiKey: process.env.AZURE_AI_KEY,

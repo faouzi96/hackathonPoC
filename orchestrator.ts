@@ -3,12 +3,12 @@ import { exec } from "child_process";
 import { writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getProjectStructure } from "./local-scripts/graphAgent";
-import { localMcpClientCodeAnalyser } from "./local-scripts/codeAnalyzerAgent";
+import { getProjectStructure } from "./local-scripts/graphAgent.js";
+import { localMcpClientCodeAnalyser } from "./local-scripts/codeAnalyzerAgent.js";
 import {
   getProjectDescription,
   Metadata,
-} from "./local-scripts/projectDescriberAgent";
+} from "./local-scripts/projectDescriberAgent.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

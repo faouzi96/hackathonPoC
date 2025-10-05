@@ -1,19 +1,17 @@
 {
   "metadata": {
     "projectType": "web-app",
-    "framework": "ASP.NET Core",
+    "framework": "Express",
     "ignorePatterns": [
-      "obj/",
-      "bin/",
-      "*.user",
-      "*.msi",
-      "*.cache",
-      "*.pdb"
+      "node_modules/",
+      ".git/",
+      "*.env",
+      "package-lock.json"
     ],
-    "description": "An ASP.NET Core web application project in C# with MVC structure including Controllers, DTOs, Entities, Migrations, and configuration files such as appsettings.json. Uses profiles for mapping and a seeder for database initialization."
+    "description": "A Node.js web application using TypeScript with an Express backend. Project contains client folder (likely frontend), configuration files for TypeScript and Node package management, environment variables, git repository data, and local scripts."
   },
   "graph": {
-    "title": "BettingAPI",
+    "title": "React XYFlow Project",
     "nodes": [
       {
         "id": "n1",
@@ -22,220 +20,126 @@
           "y": 0
         },
         "data": {
-          "label": "Controller: EventController"
+          "label": "App (functional component)"
         }
       },
       {
         "id": "n2",
         "position": {
-          "x": 0,
-          "y": 150
+          "x": 150,
+          "y": 0
         },
         "data": {
-          "label": "Entity: Event"
+          "label": "NodeSelector (functional component)"
         }
       },
       {
         "id": "n3",
         "position": {
-          "x": 0,
-          "y": 300
+          "x": 300,
+          "y": 0
         },
         "data": {
-          "label": "Entity: Confrontation"
+          "label": "ViewTitle (functional component)"
         }
       },
       {
         "id": "n4",
         "position": {
-          "x": 300,
+          "x": 0,
           "y": 150
         },
         "data": {
-          "label": "Entity: EventAdress"
+          "label": "codeAnalyzerAgent (module)"
         }
       },
       {
         "id": "n5",
         "position": {
-          "x": 300,
-          "y": 300
+          "x": 150,
+          "y": 150
         },
         "data": {
-          "label": "DTO: EventDto"
+          "label": "graphAgent (module)"
         }
       },
       {
         "id": "n6",
         "position": {
           "x": 300,
-          "y": 450
+          "y": 150
         },
         "data": {
-          "label": "DTO: ConfrontationDto"
+          "label": "projectDescriberAgent (module)"
         }
       },
       {
         "id": "n7",
         "position": {
-          "x": 600,
-          "y": 150
+          "x": 0,
+          "y": 300
         },
         "data": {
-          "label": "DTO: CreateEventDto"
+          "label": "mcp-server (module)"
         }
       },
       {
         "id": "n8",
         "position": {
-          "x": 600,
-          "y": 0
+          "x": 150,
+          "y": 300
         },
         "data": {
-          "label": "DbContext: BettingDbContext"
+          "label": "orchestrator (module)"
         }
       },
       {
         "id": "n9",
         "position": {
-          "x": 900,
-          "y": 0
-        },
-        "data": {
-          "label": "MappingProfile: EventMappingProfile"
-        }
-      },
-      {
-        "id": "n10",
-        "position": {
-          "x": 900,
+          "x": 300,
           "y": 300
         },
         "data": {
-          "label": "Program"
+          "label": "main (entry module)"
         }
       }
     ],
     "edges": [
       {
-        "id": "n1-n8",
+        "id": "n1-n2",
         "source": "n1",
-        "target": "n8",
-        "label": "usage (DbContext injection)"
-      },
-      {
-        "id": "n1-n9",
-        "source": "n1",
-        "target": "n9",
-        "label": "usage (Mapper injection)"
-      },
-      {
-        "id": "n8-n2",
-        "source": "n8",
         "target": "n2",
-        "label": "composition (DbSet<Event>)"
+        "label": "usage (imports NodeSelector)"
+      },
+      {
+        "id": "n1-n3",
+        "source": "n1",
+        "target": "n3",
+        "label": "usage (imports ViewTitle)"
+      },
+      {
+        "id": "n9-n1",
+        "source": "n9",
+        "target": "n1",
+        "label": "usage (imports App)"
       },
       {
         "id": "n8-n4",
         "source": "n8",
         "target": "n4",
-        "label": "composition (DbSet<EventAdress>)"
+        "label": "usage (imports codeAnalyzerAgent)"
       },
       {
-        "id": "n8-n3",
+        "id": "n8-n5",
         "source": "n8",
-        "target": "n3",
-        "label": "composition (DbSet<Confrontation>)"
-      },
-      {
-        "id": "n2-n4",
-        "source": "n2",
-        "target": "n4",
-        "label": "composition (EventAdress property)"
-      },
-      {
-        "id": "n2-n3",
-        "source": "n2",
-        "target": "n3",
-        "label": "composition (List<Confrontation> property)"
-      },
-      {
-        "id": "n3-n2",
-        "source": "n3",
-        "target": "n2",
-        "label": "usage (Event property)"
-      },
-      {
-        "id": "n4-n2",
-        "source": "n4",
-        "target": "n2",
-        "label": "usage (Event property)"
-      },
-      {
-        "id": "n5-n6",
-        "source": "n5",
-        "target": "n6",
-        "label": "composition (List<ConfrontationDto> property)"
-      },
-      {
-        "id": "n5-n2",
-        "source": "n5",
-        "target": "n2",
-        "label": "mapping target from Event entity"
-      },
-      {
-        "id": "n6-n3",
-        "source": "n6",
-        "target": "n3",
-        "label": "mapping target from Confrontation entity"
-      },
-      {
-        "id": "n7-n2",
-        "source": "n7",
-        "target": "n2",
-        "label": "mapping source to Event entity"
-      },
-      {
-        "id": "n9-n2",
-        "source": "n9",
-        "target": "n2",
-        "label": "inherits Profile (AutoMapper)"
-      },
-      {
-        "id": "n9-n5",
-        "source": "n9",
         "target": "n5",
-        "label": "mapping source for EventDto"
+        "label": "usage (imports graphAgent)"
       },
       {
-        "id": "n9-n6",
-        "source": "n9",
+        "id": "n8-n6",
+        "source": "n8",
         "target": "n6",
-        "label": "mapping source for ConfrontationDto"
-      },
-      {
-        "id": "n9-n7",
-        "source": "n9",
-        "target": "n7",
-        "label": "mapping source for CreateEventDto"
-      },
-      {
-        "id": "n10-n1",
-        "source": "n10",
-        "target": "n1",
-        "label": "usage (application entry)"
-      },
-      {
-        "id": "n1-n5",
-        "source": "n1",
-        "target": "n5",
-        "label": "usage (returns EventDto)"
-      },
-      {
-        "id": "n1-n7",
-        "source": "n1",
-        "target": "n7",
-        "label": "usage (accepts CreateEventDto)"
+        "label": "usage (imports projectDescriberAgent)"
       }
     ]
   }
