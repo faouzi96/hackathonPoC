@@ -1,8 +1,8 @@
 import { createAzure } from "@ai-sdk/azure";
 import "dotenv/config";
 import { generateText, ModelMessage } from "ai";
-import { systemMessage } from "../globals/systemMessage.js";
-import { getUserInfo } from "../globals/userInfoCollector.js";
+import { systemMessage } from "../utils/systemMessage.js";
+import { getUserInfo } from "../services/userInfoCollector.js";
 
 const AZURE_AI_KEY = getUserInfo("AZURE_AI_KEY");
 const AZURE_AI_API_VERSION = getUserInfo("AZURE_AI_API_VERSION");

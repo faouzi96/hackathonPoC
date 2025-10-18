@@ -6,9 +6,9 @@ import "dotenv/config";
 import { generateText, jsonSchema, ModelMessage, tool } from "ai";
 import { readdir } from "fs/promises";
 import { join, resolve } from "path";
-import { systemContentAnalyserMessage } from "../globals/systemMessage.js";
+import { systemContentAnalyserMessage } from "../utils/systemMessage.js";
 import { Metadata } from "./projectDescriberAgent.js";
-import { getUserInfo } from "../globals/userInfoCollector.js";
+import { getUserInfo } from "../services/userInfoCollector.js";
 
 const AZURE_AI_KEY = getUserInfo("AZURE_AI_KEY");
 const AZURE_AI_API_VERSION = getUserInfo("AZURE_AI_API_VERSION");

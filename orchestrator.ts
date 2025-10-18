@@ -2,15 +2,16 @@ import { exec } from "child_process";
 import { writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getProjectStructure } from "./local-scripts/graphAgent.js";
-import { localMcpClientCodeAnalyser } from "./local-scripts/codeAnalyzerAgent.js";
+import { getProjectStructure } from "./agents/graphAgent.js";
+import { localMcpClientCodeAnalyser } from "./agents/codeAnalyzerAgent.js";
 import {
   getProjectDescription,
   Metadata,
-} from "./local-scripts/projectDescriberAgent.js";
-import { projectInfoCollector } from "./globals/projectInfoCollector.js";
-import { userInfoCollector } from "./globals/userInfoCollector.js";
+} from "./agents/projectDescriberAgent.js";
+import { projectInfoCollector } from "./services/projectInfoCollector.js";
+import { userInfoCollector } from "./services/userInfoCollector.js";
 import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
+import { server } from "./services/server.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -81,10 +82,8 @@ async function main() {
     "FlowGraph UI Development Server Running on:"
   );
 
-  console.log("URL: http://localhost:3000");
-
   exec(
-    "npm run dev",
+    "npm run build",
     { cwd: path.join(__dirname, "client") },
     (err, stdout, stderr) => {
       if (err) {
@@ -93,6 +92,11 @@ async function main() {
       }
     }
   );
+
+  const PORT = 3001;
+  server.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
 }
 
 main();
