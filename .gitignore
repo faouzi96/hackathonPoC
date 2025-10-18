@@ -25,3 +25,6 @@ dist-ssr
 .env
 ./client/public/data.json
 client/public/data.json
+
+# Creds Folder
+creds/*

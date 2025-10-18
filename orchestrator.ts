@@ -10,47 +10,70 @@ import {
 } from "./local-scripts/projectDescriberAgent.js";
 import { projectInfoCollector } from "./globals/projectInfoCollector.js";
 import { userInfoCollector } from "./globals/userInfoCollector.js";
+import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const publicPath = path.join(__dirname, "client", "public", "data.json");
 
+const describerAgentRunnable = RunnableLambda.from(async (uri: string) => {
+  console.info(
+    "\x1b[34m%s\x1b[0m",
+    "Agent 1: Analyzing and Describing the Project..."
+  );
+  const metadata = await getProjectDescription(uri);
+  return { uri, metadata };
+});
+
+const codeAnalyzerAgentRunnable = RunnableLambda.from(
+  async (args: { uri: string; metadata: Metadata }) => {
+    console.info(
+      "\x1b[34m%s\x1b[0m",
+      "Agent 2: Loading and Analyzing File Content..."
+    );
+    const data = await localMcpClientCodeAnalyser(args.uri, args.metadata);
+    return { data: data, metadata: args.metadata };
+  }
+);
+
+const graphAgentRunnable = RunnableLambda.from(
+  async (agrs: { data: string; metadata: Metadata }) => {
+    console.info(
+      "\x1b[34m%s\x1b[0m",
+      "Agent 3: Generating the Project Graph..."
+    );
+    const graph = await getProjectStructure(agrs.data);
+    return { graph: graph, metadata: agrs.metadata };
+  }
+);
+
+const pipeline = RunnableSequence.from([
+  describerAgentRunnable,
+  codeAnalyzerAgentRunnable,
+  graphAgentRunnable,
+]);
+
 async function main() {
   await userInfoCollector();
 
   const { env, uri } = await projectInfoCollector();
 
-  let metadata: Metadata | null = null;
-
-  if (env === "Local") {
-    console.info(
-      "\x1b[34m%s\x1b[0m",
-      "Agent 1: Analyzing and Describing the Project..."
-    );
-    metadata = await getProjectDescription(uri);
-  } else {
+  if (env !== "Local") {
     console.error("Feature is not yet available! Sorry!");
     process.exit(0);
   }
 
-  let response: string = "";
-
-  console.info(
-    "\x1b[34m%s\x1b[0m",
-    "Agent 2: Loading and Analyzing File Content..."
-  );
-
-  const data = await localMcpClientCodeAnalyser(uri, metadata);
-
-  console.info("\x1b[34m%s\x1b[0m", "Agent 3: Generating the Project Graph...");
-
-  if (data) response = await getProjectStructure(data);
+  const response = await pipeline.invoke(uri);
 
   console.info("Launching the FlowGraph UI...");
   writeFileSync(
     publicPath,
-    JSON.stringify({ metadata: metadata, graph: JSON.parse(response) }, null, 2)
+    JSON.stringify(
+      { metadata: response.metadata, graph: JSON.parse(response.graph) },
+      null,
+      2
+    )
   );
 
   console.log(
