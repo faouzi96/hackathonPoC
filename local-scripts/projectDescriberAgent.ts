@@ -3,6 +3,7 @@ import "dotenv/config";
 import { generateText, ModelMessage } from "ai";
 import { systemDescriberMessage } from "../globals/systemMessage.js";
 import { readdir } from "node:fs/promises";
+import { getUserInfo } from "../globals/userInfoCollector.js";
 
 export type Metadata = {
   projectType: string;
@@ -11,16 +12,22 @@ export type Metadata = {
   description: string;
 };
 
+const AZURE_AI_KEY = getUserInfo("AZURE_AI_KEY");
+const AZURE_AI_API_VERSION = getUserInfo("AZURE_AI_API_VERSION");
+const AZURE_AI_ENDPOINT = getUserInfo("AZURE_AI_ENDPOINT");
+const AZURE_RESOURCE_NAME = getUserInfo("AZURE_RESOURCE_NAME");
+const AZURE_MODEL_NAME = getUserInfo("AZURE_MODEL_NAME");
+
 const azure = createAzure({
-  apiKey: process.env.AZURE_AI_KEY,
-  apiVersion: process.env.AZURE_AI_API_VERSION,
-  baseURL: process.env.AZURE_AI_ENDPOINT,
-  resourceName: process.env.AZURE_RESOURCE_NAME,
+  apiKey: AZURE_AI_KEY,
+  apiVersion: AZURE_AI_API_VERSION,
+  baseURL: AZURE_AI_ENDPOINT,
+  resourceName: AZURE_RESOURCE_NAME,
 });
 
 async function queryProcessing(messages: ModelMessage[]) {
   const finalResponse = await generateText({
-    model: azure("gpt-4.5-mini"),
+    model: azure(AZURE_MODEL_NAME),
     messages: messages,
   });
 

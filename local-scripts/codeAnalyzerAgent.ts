@@ -8,6 +8,13 @@ import { readdir } from "fs/promises";
 import { join, resolve } from "path";
 import { systemContentAnalyserMessage } from "../globals/systemMessage.js";
 import { Metadata } from "./projectDescriberAgent.js";
+import { getUserInfo } from "../globals/userInfoCollector.js";
+
+const AZURE_AI_KEY = getUserInfo("AZURE_AI_KEY");
+const AZURE_AI_API_VERSION = getUserInfo("AZURE_AI_API_VERSION");
+const AZURE_AI_ENDPOINT = getUserInfo("AZURE_AI_ENDPOINT");
+const AZURE_RESOURCE_NAME = getUserInfo("AZURE_RESOURCE_NAME");
+const AZURE_MODEL_NAME = getUserInfo("AZURE_MODEL_NAME");
 
 const mcpClient = new Client(
   {
@@ -23,10 +30,10 @@ const mcpClient = new Client(
 );
 
 const azure = createAzure({
-  apiKey: process.env.AZURE_AI_KEY,
-  apiVersion: process.env.AZURE_AI_API_VERSION,
-  baseURL: process.env.AZURE_AI_ENDPOINT,
-  resourceName: process.env.AZURE_RESOURCE_NAME,
+  apiKey: AZURE_AI_KEY,
+  apiVersion: AZURE_AI_API_VERSION,
+  baseURL: AZURE_AI_ENDPOINT,
+  resourceName: AZURE_RESOURCE_NAME,
 });
 
 const transport = new StdioClientTransport({
@@ -39,7 +46,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
   const messages: ModelMessage[] = [...query];
 
   const response = await generateText({
-    model: azure("gpt-4.5-mini"),
+    model: azure(AZURE_MODEL_NAME),
     prompt: messages,
     tools: tools.reduce(
       (obj, t) => ({

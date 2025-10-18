@@ -1,4 +1,3 @@
-import { input, select } from "@inquirer/prompts";
 import { exec } from "child_process";
 import { writeFileSync } from "fs";
 import path from "path";
@@ -9,6 +8,8 @@ import {
   getProjectDescription,
   Metadata,
 } from "./local-scripts/projectDescriberAgent.js";
+import { projectInfoCollector } from "./globals/projectInfoCollector.js";
+import { userInfoCollector } from "./globals/userInfoCollector.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,15 +17,9 @@ const __dirname = path.dirname(__filename);
 const publicPath = path.join(__dirname, "client", "public", "data.json");
 
 async function main() {
-  const env = await select({
-    message: "Choose your project environment!",
-    choices: ["Local", "Github (not ready)"],
-  });
+  await userInfoCollector();
 
-  // go through the files load their paths into the context.
-  const uri = await input({
-    message: "Please insert the absolute path for your project files",
-  });
+  const { env, uri } = await projectInfoCollector();
 
   let metadata: Metadata | null = null;
 
@@ -35,19 +30,21 @@ async function main() {
     );
     metadata = await getProjectDescription(uri);
   } else {
-    console.error("Feature is not available yet! Sorry!");
+    console.error("Feature is not yet available! Sorry!");
     process.exit(0);
   }
 
-  let data: string = "";
   let response: string = "";
+
   console.info(
     "\x1b[34m%s\x1b[0m",
     "Agent 2: Loading and Analyzing File Content..."
   );
-  data = await localMcpClientCodeAnalyser(uri, metadata);
+
+  const data = await localMcpClientCodeAnalyser(uri, metadata);
 
   console.info("\x1b[34m%s\x1b[0m", "Agent 3: Generating the Project Graph...");
+
   if (data) response = await getProjectStructure(data);
 
   console.info("Launching the FlowGraph UI...");
@@ -60,7 +57,9 @@ async function main() {
     "\x1b[32m%s\x1b[0m",
     "FlowGraph UI Development Server Running on:"
   );
+
   console.log("URL: http://localhost:3000");
+
   exec(
     "npm run dev",
     { cwd: path.join(__dirname, "client") },
