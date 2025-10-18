@@ -1,4 +1,5 @@
-import { exec } from "child_process";
+#!/usr/bin/env node
+
 import { writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -16,7 +17,7 @@ import { server } from "./services/server.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const publicPath = path.join(__dirname, "client", "public", "data.json");
+const publicPath = path.join(__dirname, "client", "dist", "data.json");
 
 const describerAgentRunnable = RunnableLambda.from(async (uri: string) => {
   console.info(
@@ -80,17 +81,6 @@ async function main() {
   console.log(
     "\x1b[32m%s\x1b[0m",
     "FlowGraph UI Development Server Running on:"
-  );
-
-  exec(
-    "npm run build",
-    { cwd: path.join(__dirname, "client") },
-    (err, stdout, stderr) => {
-      if (err) {
-        console.error("❌ Failed to start React app:", err);
-        return;
-      }
-    }
   );
 
   const PORT = 3001;

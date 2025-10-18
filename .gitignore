@@ -28,3 +28,6 @@ client/public/data.json
 
 # Creds Folder
 creds/*
+
+// build
+build/*

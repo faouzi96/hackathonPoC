@@ -1,12 +1,17 @@
 {
-  "name": "hackathonpoc",
+  "name": "flow-analyser",
   "version": "1.0.0",
   "type": "module",
-  "main": "orchestrator.js",
+  "main": "build/orchestrator.js",
+  "bin": {
+    "flowAnalyser": "build/orchestrator.js"
+  },
   "scripts": {
+    "app:package": "npm run pre-package && npm pack --prefix build",
+    "pre-package": "node local-scripts/package-app.js",
     "build": "tsc",
     "dev": "tsx orchestrator.ts",
-    "mcp:server:dev": "tsx local-scripts/mcp-server.ts",
+    "mcp:server:dev": "tsx mcp-servers/mcp-server.ts",
     "mcp:server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run mcp:server:dev"
   },
   "keywords": [],
@@ -16,6 +21,7 @@
   "devDependencies": {
     "@types/node": "^24.6.0",
     "@types/node-localstorage": "^1.3.3",
+    "fs-extra": "^11.3.2",
     "typescript": "^5.9.2"
   },
   "dependencies": {
