@@ -1,4 +1,3 @@
-import { minimatch } from "minimatch";
 import { createAzure } from "@ai-sdk/azure";
 import { Client } from "@modelcontextprotocol/sdk/client";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
@@ -6,12 +5,9 @@ import { Tool } from "@modelcontextprotocol/sdk/types.js";
 import "dotenv/config";
 import { generateText, jsonSchema, ModelMessage, tool } from "ai";
 import { readdir } from "fs/promises";
-import { input } from "@inquirer/prompts";
 import { join, resolve } from "path";
-import {
-  systemContentAnalyserMessage,
-  systemMessage,
-} from "../globals/systemMessage";
+import { systemContentAnalyserMessage } from "../globals/systemMessage.js";
+import { Metadata } from "./projectDescriberAgent.js";
 
 const mcpClient = new Client(
   {
@@ -109,17 +105,18 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
   return finalText.join("\n");
 }
 
-export async function localMcpClientCodeAnalyser() {
-  const ignorePatterns = ["node_modules", ".*", "temp*", ".env"];
-
-  // go through the files load their paths into the context.
-  const uri = await input({
-    message: "Please insert the absolute path for your project files",
-  });
-
-  const files = (await getAllFilePaths(uri, ignorePatterns)).join("\n");
+export async function localMcpClientCodeAnalyser(
+  uri: string,
+  metadata: Metadata
+) {
+  const files = (await getAllFilePaths(uri, metadata.ignorePatterns)).join(
+    "\n"
+  );
   const fileContext = `\n\nList of the files:
   \n${files}`;
+
+  const description = `\nConsider the following project description given by analyzing the project files:
+\n ${metadata.description}`;
 
   await mcpClient.connect(transport);
 
@@ -128,7 +125,7 @@ export async function localMcpClientCodeAnalyser() {
   const messages: ModelMessage[] = [
     {
       role: "system",
-      content: systemContentAnalyserMessage + fileContext,
+      content: systemContentAnalyserMessage + fileContext + description,
     },
   ];
 
@@ -152,7 +149,12 @@ async function getAllFilePaths(
       const fullPath = join(currentPath, name);
 
       // Skip hidden files/folders and user-defined patterns
-      if (ignorePatterns.some((pattern) => minimatch(name, pattern))) {
+      if (
+        ignorePatterns.some((pattern) => {
+          // Check if the full path or just the name matches any ignore pattern
+          return fullPath.includes(pattern.replace("/", "").replace('"', ""));
+        })
+      ) {
         continue;
       }
 

@@ -80,3 +80,14 @@ Perform static code analysis to extract the required metadata.
 Ensure the output JSON is clean, well-structured, and includes all relevant elements.
 If the file format is unsupported or malformed, return a meaningful error message.
 `;
+
+export const systemDescriberMessage = `
+You are a project structure analyzer. Given a list of file and folder names from a codebase, your task is to return a JSON object with the following structure:
+
+{
+  \"projectType\": string, // e.g., 'web-app', 'library', 'cli-tool', etc.
+  \"framework\": string, // e.g., 'React', 'Next.js', 'Express', 'Django', etc.
+  \"ignorePatterns\": string[], // List of file or folder patterns that should be ignored by a code analyzer (e.g., 'node_modules/', '*.config.js', etc.)
+  \"description\": string, // give a general and small description of the content (like the tools, language, framework if it exist, etc), this description will be used to help another LLM to generate the class, interfaces, etc dependency detection.
+}
+`;

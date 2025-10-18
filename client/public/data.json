@@ -1,213 +1,146 @@
 {
-  "title": "github-local-mcp",
-  "nodes": [
-    {
-      "id": "n1",
-      "position": {
-        "x": 0,
-        "y": 0
+  "metadata": {
+    "projectType": "web-app",
+    "framework": "Express",
+    "ignorePatterns": [
+      "node_modules/",
+      ".git/",
+      "*.env",
+      "package-lock.json"
+    ],
+    "description": "A Node.js web application using TypeScript with an Express backend. Project contains client folder (likely frontend), configuration files for TypeScript and Node package management, environment variables, git repository data, and local scripts."
+  },
+  "graph": {
+    "title": "React XYFlow Project",
+    "nodes": [
+      {
+        "id": "n1",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "data": {
+          "label": "App (functional component)"
+        }
       },
-      "data": {
-        "label": "App (React Component)"
-      }
-    },
-    {
-      "id": "n2",
-      "position": {
-        "x": 200,
-        "y": 0
+      {
+        "id": "n2",
+        "position": {
+          "x": 150,
+          "y": 0
+        },
+        "data": {
+          "label": "NodeSelector (functional component)"
+        }
       },
-      "data": {
-        "label": "ViewTitle (React Component)"
-      }
-    },
-    {
-      "id": "n3",
-      "position": {
-        "x": 0,
-        "y": 120
+      {
+        "id": "n3",
+        "position": {
+          "x": 300,
+          "y": 0
+        },
+        "data": {
+          "label": "ViewTitle (functional component)"
+        }
       },
-      "data": {
-        "label": "MainEntry (React StrictMode Wrapper)"
-      }
-    },
-    {
-      "id": "n4",
-      "position": {
-        "x": 0,
-        "y": 240
+      {
+        "id": "n4",
+        "position": {
+          "x": 0,
+          "y": 150
+        },
+        "data": {
+          "label": "codeAnalyzerAgent (module)"
+        }
       },
-      "data": {
-        "label": "localMcpClient (function)"
-      }
-    },
-    {
-      "id": "n5",
-      "position": {
-        "x": 300,
-        "y": 240
+      {
+        "id": "n5",
+        "position": {
+          "x": 150,
+          "y": 150
+        },
+        "data": {
+          "label": "graphAgent (module)"
+        }
       },
-      "data": {
-        "label": "queryProcessing (function)"
-      }
-    },
-    {
-      "id": "n6",
-      "position": {
-        "x": 600,
-        "y": 240
+      {
+        "id": "n6",
+        "position": {
+          "x": 300,
+          "y": 150
+        },
+        "data": {
+          "label": "projectDescriberAgent (module)"
+        }
       },
-      "data": {
-        "label": "mcpClient (Client instance)"
-      }
-    },
-    {
-      "id": "n7",
-      "position": {
-        "x": 900,
-        "y": 240
+      {
+        "id": "n7",
+        "position": {
+          "x": 0,
+          "y": 300
+        },
+        "data": {
+          "label": "mcp-server (module)"
+        }
       },
-      "data": {
-        "label": "StdioClientTransport (class)"
-      }
-    },
-    {
-      "id": "n8",
-      "position": {
-        "x": 0,
-        "y": 360
+      {
+        "id": "n8",
+        "position": {
+          "x": 150,
+          "y": 300
+        },
+        "data": {
+          "label": "orchestrator (module)"
+        }
       },
-      "data": {
-        "label": "McpServer (class)"
+      {
+        "id": "n9",
+        "position": {
+          "x": 300,
+          "y": 300
+        },
+        "data": {
+          "label": "main (entry module)"
+        }
       }
-    },
-    {
-      "id": "n9",
-      "position": {
-        "x": 300,
-        "y": 360
+    ],
+    "edges": [
+      {
+        "id": "n1-n2",
+        "source": "n1",
+        "target": "n2",
+        "label": "usage (imports NodeSelector)"
       },
-      "data": {
-        "label": "StdioServerTransport (class)"
-      }
-    },
-    {
-      "id": "n10",
-      "position": {
-        "x": 600,
-        "y": 360
+      {
+        "id": "n1-n3",
+        "source": "n1",
+        "target": "n3",
+        "label": "usage (imports ViewTitle)"
       },
-      "data": {
-        "label": "Server Tool: get-file-content (tool function)"
-      }
-    },
-    {
-      "id": "n11",
-      "position": {
-        "x": 900,
-        "y": 360
+      {
+        "id": "n9-n1",
+        "source": "n9",
+        "target": "n1",
+        "label": "usage (imports App)"
       },
-      "data": {
-        "label": "loadFileContent (function)"
-      }
-    },
-    {
-      "id": "n12",
-      "position": {
-        "x": 0,
-        "y": 480
+      {
+        "id": "n8-n4",
+        "source": "n8",
+        "target": "n4",
+        "label": "usage (imports codeAnalyzerAgent)"
       },
-      "data": {
-        "label": "main (server start function)"
-      }
-    },
-    {
-      "id": "n13",
-      "position": {
-        "x": 0,
-        "y": 600
+      {
+        "id": "n8-n5",
+        "source": "n8",
+        "target": "n5",
+        "label": "usage (imports graphAgent)"
       },
-      "data": {
-        "label": "ClientScript Main (function)"
+      {
+        "id": "n8-n6",
+        "source": "n8",
+        "target": "n6",
+        "label": "usage (imports projectDescriberAgent)"
       }
-    },
-    {
-      "id": "n14",
-      "position": {
-        "x": 300,
-        "y": 600
-      },
-      "data": {
-        "label": "jsonData (graph data)"
-      }
-    }
-  ],
-  "edges": [
-    {
-      "id": "n1-n2",
-      "source": "n1",
-      "target": "n2",
-      "label": "uses"
-    },
-    {
-      "id": "n3-n1",
-      "source": "n3",
-      "target": "n1",
-      "label": "renders"
-    },
-    {
-      "id": "n4-n5",
-      "source": "n4",
-      "target": "n5",
-      "label": "calls"
-    },
-    {
-      "id": "n4-n6",
-      "source": "n4",
-      "target": "n6",
-      "label": "uses"
-    },
-    {
-      "id": "n6-n7",
-      "source": "n6",
-      "target": "n7",
-      "label": "composed-with"
-    },
-    {
-      "id": "n8-n9",
-      "source": "n8",
-      "target": "n9",
-      "label": "composed-with"
-    },
-    {
-      "id": "n8-n10",
-      "source": "n8",
-      "target": "n10",
-      "label": "defines tool"
-    },
-    {
-      "id": "n10-n11",
-      "source": "n10",
-      "target": "n11",
-      "label": "uses"
-    },
-    {
-      "id": "n12-n8",
-      "source": "n12",
-      "target": "n8",
-      "label": "initializes"
-    },
-    {
-      "id": "n13-n4",
-      "source": "n13",
-      "target": "n4",
-      "label": "calls"
-    },
-    {
-      "id": "n13-n14",
-      "source": "n13",
-      "target": "n14",
-      "label": "uses"
-    }
-  ]
+    ]
+  }
 }
