@@ -1,10 +1,10 @@
 {
-  "name": "flow-analyser",
+  "name": "flow-analyzer",
   "version": "1.0.0",
   "type": "module",
   "main": "build/orchestrator.js",
   "bin": {
-    "flowAnalyser": "build/orchestrator.js"
+    "flowAnalyzer": "build/orchestrator.js"
   },
   "scripts": {
     "app:package": "npm run pre-package && npm pack --prefix build",
