@@ -1,20 +1,12 @@
-import { createAzure } from "@ai-sdk/azure";
 import { Client } from "@modelcontextprotocol/sdk/client";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { Tool } from "@modelcontextprotocol/sdk/types.js";
-import "dotenv/config";
 import { generateText, jsonSchema, ModelMessage, tool } from "ai";
 import { readdir } from "fs/promises";
 import { join, resolve } from "path";
 import { systemContentAnalyserMessage } from "../utils/systemMessage.js";
 import { Metadata } from "./projectDescriberAgent.js";
-import { getUserInfo } from "../services/userInfoCollector.js";
-
-const AZURE_AI_KEY = getUserInfo("AZURE_AI_KEY");
-const AZURE_AI_API_VERSION = getUserInfo("AZURE_AI_API_VERSION");
-const AZURE_AI_ENDPOINT = getUserInfo("AZURE_AI_ENDPOINT");
-const AZURE_RESOURCE_NAME = getUserInfo("AZURE_RESOURCE_NAME");
-const AZURE_MODEL_NAME = getUserInfo("AZURE_MODEL_NAME");
+import { llmConnection } from "../globals/llmConnection.js";
 
 const mcpClient = new Client(
   {
@@ -29,13 +21,6 @@ const mcpClient = new Client(
   }
 );
 
-const azure = createAzure({
-  apiKey: AZURE_AI_KEY,
-  apiVersion: AZURE_AI_API_VERSION,
-  baseURL: AZURE_AI_ENDPOINT,
-  resourceName: AZURE_RESOURCE_NAME,
-});
-
 const transport = new StdioClientTransport({
   command: "npm",
   args: ["run", "mcp:server:dev"],
@@ -46,7 +31,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
   const messages: ModelMessage[] = [...query];
 
   const response = await generateText({
-    model: azure(AZURE_MODEL_NAME),
+    model: llmConnection,
     prompt: messages,
     tools: tools.reduce(
       (obj, t) => ({
@@ -96,7 +81,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
       ];
 
       const finalResponse = await generateText({
-        model: azure("gpt-4.5-mini"),
+        model: llmConnection,
         messages: newMessages,
         maxOutputTokens: 1000,
       });

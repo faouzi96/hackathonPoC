@@ -1,0 +1,149 @@
+export const describerAgentResponse = {
+  projectType: "web-app",
+  framework: "Express",
+  ignorePatterns: ["node_modules/", ".git/", "*.env", "package-lock.json"],
+  description:
+    "A Node.js web application using TypeScript with an Express backend. Project contains client folder (likely frontend), configuration files for TypeScript and Node package management, environment variables, git repository data, and local scripts.",
+};
+
+export const codeAnalyzerAgentResponse = "File: server.ts";
+
+export const graphAgentResponse = {
+  title: "React XYFlow Project",
+  nodes: [
+    {
+      id: "n1",
+      position: {
+        x: 0,
+        y: 0,
+      },
+      data: {
+        label: "App (functional component)",
+      },
+    },
+    {
+      id: "n2",
+      position: {
+        x: 150,
+        y: 0,
+      },
+      data: {
+        label: "NodeSelector (functional component)",
+      },
+    },
+    {
+      id: "n3",
+      position: {
+        x: 300,
+        y: 0,
+      },
+      data: {
+        label: "ViewTitle (functional component)",
+      },
+    },
+    {
+      id: "n4",
+      position: {
+        x: 0,
+        y: 150,
+      },
+      data: {
+        label: "codeAnalyzerAgent (module)",
+      },
+    },
+    {
+      id: "n5",
+      position: {
+        x: 150,
+        y: 150,
+      },
+      data: {
+        label: "graphAgent (module)",
+      },
+    },
+    {
+      id: "n6",
+      position: {
+        x: 300,
+        y: 150,
+      },
+      data: {
+        label: "projectDescriberAgent (module)",
+      },
+    },
+    {
+      id: "n7",
+      position: {
+        x: 0,
+        y: 300,
+      },
+      data: {
+        label: "mcp-server (module)",
+      },
+    },
+    {
+      id: "n8",
+      position: {
+        x: 150,
+        y: 300,
+      },
+      data: {
+        label: "orchestrator (module)",
+      },
+    },
+    {
+      id: "n9",
+      position: {
+        x: 300,
+        y: 300,
+      },
+      data: {
+        label: "main (entry module)",
+      },
+    },
+  ],
+  edges: [
+    {
+      id: "n1-n2",
+      source: "n1",
+      target: "n2",
+      label: "usage (imports NodeSelector)",
+    },
+    {
+      id: "n1-n3",
+      source: "n1",
+      target: "n3",
+      label: "usage (imports ViewTitle)",
+    },
+    {
+      id: "n9-n1",
+      source: "n9",
+      target: "n1",
+      label: "usage (imports App)",
+    },
+    {
+      id: "n8-n4",
+      source: "n8",
+      target: "n4",
+      label: "usage (imports codeAnalyzerAgent)",
+    },
+    {
+      id: "n8-n5",
+      source: "n8",
+      target: "n5",
+      label: "usage (imports graphAgent)",
+    },
+    {
+      id: "n8-n6",
+      source: "n8",
+      target: "n6",
+      label: "usage (imports projectDescriberAgent)",
+    },
+    {
+      id: "n4-n7",
+      source: "n4",
+      target: "n7",
+      label: "usage (imports MCP client)",
+    },
+  ],
+};
