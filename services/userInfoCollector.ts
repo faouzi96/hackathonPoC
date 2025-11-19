@@ -8,7 +8,22 @@ type UserInfo =
   | "AZURE_AI_KEY"
   | "AZURE_AI_API_VERSION"
   | "AZURE_RESOURCE_NAME"
-  | "AZURE_MODEL_NAME";
+  | "AZURE_MODEL_NAME"
+  | "OPENAI_BASE_URL"
+  | "OPENAI_API_KEY"
+  | "OPENAI_MODEL_NAME"
+  | "ANTHROPIC_BASE_URL"
+  | "ANTHROPIC_API_KEY"
+  | "ANTHROPIC_MODEL_NAME"
+  | "GOOGLE_BASE_URL"
+  | "GOOGLE_API_KEY"
+  | "GOOGLE_MODEL_NAME"
+  | "OLLAMA_BASE_URL"
+  | "OLLAMA_API_KEY"
+  | "OLLAMA_MODEL_NAME"
+  | "VLLM_BASE_URL"
+  | "VLLM_MODEL_NAME"
+  | "VLLM_API_KEY";
 
 export function saveUserInfo(key: UserInfo, value: string): void {
   localStorage.setItem(key, value);

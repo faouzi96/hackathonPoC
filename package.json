@@ -25,18 +25,21 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.38",
     "@ai-sdk/azure": "^2.0.42",
+    "@ai-sdk/google": "^2.0.24",
     "@inquirer/prompts": "^7.8.6",
     "@langchain/core": "^1.0.1",
     "@langchain/openai": "^1.0.0",
     "@modelcontextprotocol/inspector": "^0.16.8",
     "@modelcontextprotocol/sdk": "^1.18.2",
-    "ai": "^5.0.59",
+    "ai": "^5.0.81",
     "dotenv": "^17.2.3",
     "langchain": "^1.0.1",
     "mime": "^4.1.0",
     "node-localstorage": "^3.0.5",
     "octokit": "^5.0.3",
+    "ollama-ai-provider-v2": "^1.5.1",
     "tsx": "^4.20.6",
     "zod": "^3.25.76"
   }
