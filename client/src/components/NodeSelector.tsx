@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import type { Node } from "@xyflow/react";
-import icon from "../assets/flow.svg";
 
 type Props = {
   nodes: Node[];
@@ -30,40 +29,23 @@ export default function NodeSelector({
   }, [nodes, q]);
 
   return (
-    <aside
+    <div
       style={{
         width: 280,
+        height: "60%",
         padding: 12,
         borderRight: "1px solid #e5e7eb",
+        backgroundColor: "#fff",
         display: "flex",
         flexDirection: "column",
         gap: 8,
+        position: "absolute",
+        right: 20,
+        top: "15%",
+        zIndex: 10,
+        borderRadius: "15px",
       }}
     >
-      <div
-        style={{
-          fontWeight: 600,
-          fontSize: "20px",
-          color: "#000000e0",
-          textTransform: "uppercase",
-          borderBottom: "1px solid #00000020",
-          paddingBottom: 6,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-        }}
-      >
-        <img
-          src={icon}
-          alt="Flow Icon"
-          style={{
-            height: 35,
-          }}
-        />
-        <p>Flow Analyzer</p>
-      </div>
-
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
@@ -125,6 +107,6 @@ export default function NodeSelector({
           );
         })}
       </div>
-    </aside>
+    </div>
   );
 }

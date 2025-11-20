@@ -6,33 +6,39 @@ const ViewTitle = ({
   metadata: { projectType: string; framework: string };
 }) => {
   return (
-    <>
+    <div
+      style={{
+        width: 280,
+        height: "10%",
+        padding: 12,
+        borderRight: "1px solid #e5e7eb",
+        backgroundColor: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        position: "absolute",
+        right: 20,
+        top: "10px",
+        zIndex: 10,
+        borderRadius: "15px",
+      }}
+    >
       <div
         style={{
-          position: "absolute",
-          top: 10,
-          right: 10,
-          borderRadius: 5,
-          width: "fit-content",
-          padding: "5px 10px",
+          width: "100%",
           zIndex: 10,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          color: "white",
+          borderBottom: "1px solid #00000020",
+          padding: "5px 0",
         }}
       >
-        {title}
+        Title: {title}
       </div>
       <div
         style={{
-          position: "absolute",
-          top: 50,
-          right: 10,
-          borderRadius: 5,
-          width: "fit-content",
-          padding: "5px 10px",
+          width: "100%",
+          padding: "5px 0",
+          borderBottom: "1px solid #00000020",
           zIndex: 10,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          color: "white",
           visibility:
             metadata.projectType !== "unknown" ||
             metadata.framework !== "unknown"
@@ -42,7 +48,7 @@ const ViewTitle = ({
       >
         {metadata?.projectType} - {metadata?.framework}
       </div>
-    </>
+    </div>
   );
 };
 
