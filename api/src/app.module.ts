@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { FlowFilesService } from './flow-files/flow-files.service';
 import { FlowFilesModule } from './flow-files/flow-files.module';
-
+import { FlowDataModule } from './flow-data/flow-data.module';
 @Module({
-  imports: [FlowFilesModule],
+  imports: [FlowFilesModule, FlowDataModule],
   controllers: [AppController],
-  providers: [AppService, FlowFilesService],
+  providers: [FlowFilesService],
 })
 export class AppModule {}

@@ -37,3 +37,11 @@ export interface Metadata {
   ignorePatterns: string[];
   description: string;
 }
+
+export interface FlowOverview {
+  title: string;
+  projectName: string;
+  framework: string;
+  dateTime: string;
+  fileHash: string;
+}
