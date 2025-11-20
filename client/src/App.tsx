@@ -4,14 +4,7 @@ import FlowList from "./features/FlowList";
 
 function App() {
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className="w-screen h-screen flex flex-col">
       <FlowList />
       <FlowGraph />
     </div>

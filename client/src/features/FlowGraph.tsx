@@ -53,7 +53,7 @@ function buildAdjacency(edges: Pick<Edge, "source" | "target">[]) {
 
 function getDescendants(
   rootId: string,
-  edges: Pick<Edge, "source" | "target">[]
+  edges: Pick<Edge, "source" | "target">[],
 ) {
   const adj = buildAdjacency(edges);
   const visited = new Set<string>();
@@ -81,7 +81,7 @@ const FlowGraph = () => {
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((snap) => applyNodeChanges(changes, snap)),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -108,23 +108,23 @@ const FlowGraph = () => {
               color,
             },
           };
-        })
+        }),
       );
     },
-    [setEdges]
+    [setEdges],
   );
 
   const onNodeMouseEnter = useCallback(
     (_e: React.MouseEvent, node: Node) => applyHighlight(node.id),
-    [applyHighlight]
+    [applyHighlight],
   );
   const onNodeMouseLeave = useCallback(
     () => applyHighlight(null),
-    [applyHighlight]
+    [applyHighlight],
   );
   const onPaneMouseLeave = useCallback(
     () => applyHighlight(null),
-    [applyHighlight]
+    [applyHighlight],
   );
 
   /** --- compute the visible subset --- **/
@@ -135,7 +135,7 @@ const FlowGraph = () => {
     return {
       displayNodes: nodes.filter((n) => visible.has(n.id)),
       displayEdges: edges.filter(
-        (e) => visible.has(e.source) && visible.has(e.target)
+        (e) => visible.has(e.source) && visible.has(e.target),
       ),
     };
   }, [nodes, edges, filterRootId]);
@@ -155,7 +155,7 @@ const FlowGraph = () => {
     <>
       <ViewTitle title={title} metadata={metadata} />
       <ReactFlowProvider>
-        <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+        <div className="flex flex-1 min-h-0">
           {/* LEFT SIDEBAR: separate file */}
           <NodeSelector
             nodes={nodes}
@@ -164,7 +164,7 @@ const FlowGraph = () => {
             onClear={() => setFilterRootId(null)}
           />
           {/* CANVAS */}
-          <div style={{ flex: 1 }}>
+          <div className="flex-1">
             <ReactFlow
               nodes={displayNodes}
               edges={displayEdges}
