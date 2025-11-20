@@ -31,3 +31,6 @@ creds/*
 
 // build
 build/*
+
+
+files-storage/*.json
