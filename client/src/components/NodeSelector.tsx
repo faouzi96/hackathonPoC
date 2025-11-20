@@ -48,7 +48,7 @@ export default function NodeSelector({
       </button>
 
       <div className="overflow-y-auto border-t border-gray-100 mt-1 flex-1">
-        {filtered.map((n) => {
+        {filtered?.map((n) => {
           const active = n.id === selectedId;
           return (
             <div

@@ -13,6 +13,7 @@ import {
 import "@xyflow/react/dist/style.css";
 import NodeSelector from "../components/NodeSelector";
 import ViewTitle from "../components/ViewTitle";
+import type { FlowData } from "../types/app.types";
 
 const {
   nodes: initialNodes,
@@ -71,13 +72,15 @@ function getDescendants(
   return visited; // root not included
 }
 
-const FlowGraph = () => {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
+const FlowGraph = ({ data }: { data: FlowData | undefined }) => {
+  const [nodes, setNodes] = useState<Node[]>([]);
   const [rawEdges, setRawEdges] = useState<RawEdge[]>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]); // uncontrolled via hook
 
   const [filterRootId, setFilterRootId] = useState<string | null>(null);
   const [rf, setRf] = useState<ReactFlowInstance | null>(null);
+
+  const flowMetadata = useMemo(() => data?.metadata || metadata, [data]);
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((snap) => applyNodeChanges(changes, snap)),
@@ -85,11 +88,15 @@ const FlowGraph = () => {
   );
 
   useEffect(() => {
-    setRawEdges(initialEdges);
-  }, []);
+    setRawEdges((data?.graph.edges as unknown as RawEdge[]) || initialEdges);
+  }, [data?.graph.edges]);
 
   useEffect(() => {
-    if (rawEdges.length) setEdges(decorateEdges(rawEdges));
+    setNodes((data?.graph.nodes as unknown as Node[]) || initialNodes);
+  }, [data?.graph.nodes]);
+
+  useEffect(() => {
+    if (rawEdges?.length) setEdges(decorateEdges(rawEdges));
   }, [rawEdges, setEdges]);
 
   /** keep your hover-highlighting behavior */
@@ -142,7 +149,7 @@ const FlowGraph = () => {
 
   /** Fit to the currently visible nodes */
   useEffect(() => {
-    if (rf && displayNodes.length) {
+    if (rf && displayNodes?.length) {
       rf.fitView({
         nodes: displayNodes,
         includeHiddenNodes: false,
@@ -153,7 +160,7 @@ const FlowGraph = () => {
 
   return (
     <>
-      <ViewTitle title={title} metadata={metadata} />
+      <ViewTitle title={title} metadata={flowMetadata} />
       <ReactFlowProvider>
         <div className="flex flex-1 min-h-0">
           {/* LEFT SIDEBAR: separate file */}
