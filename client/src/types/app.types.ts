@@ -46,4 +46,9 @@ export interface FlowOverview {
   fileHash: string;
 }
 
+export interface SaveFlowBody {
+  title: string;
+  data: FlowData;
+}
+
 export type Flatten<T, K extends keyof T> = T[K];

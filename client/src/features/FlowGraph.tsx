@@ -9,19 +9,20 @@ import {
   type Node,
   type Edge,
   type ReactFlowInstance,
+  Background,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import NodeSelector from "../components/NodeSelector";
 import ViewTitle from "../components/ViewTitle";
-import type { FlowData } from "../types/app.types";
+import type { FlowData, SaveFlowBody } from "../types/app.types";
+import GraphOptions from "../components/GraphOptions";
+import UnsavedLabel from "../components/UnsavedLabel";
 
-const {
-  nodes: initialNodes,
-  edges: initialEdges,
-  title,
-} = window.GRAPH_DATA.graph;
+const initialData = window.GRAPH_DATA;
 
-const metadata = window.GRAPH_DATA.metadata;
+const { nodes: initialNodes, edges: initialEdges, title } = initialData.graph;
+
+const metadata = initialData.metadata;
 
 const DEFAULT_COLOR = "#333";
 const HOVER_COLOR = "red";
@@ -54,7 +55,7 @@ function buildAdjacency(edges: Pick<Edge, "source" | "target">[]) {
 
 function getDescendants(
   rootId: string,
-  edges: Pick<Edge, "source" | "target">[],
+  edges: Pick<Edge, "source" | "target">[]
 ) {
   const adj = buildAdjacency(edges);
   const visited = new Set<string>();
@@ -72,7 +73,15 @@ function getDescendants(
   return visited; // root not included
 }
 
-const FlowGraph = ({ data }: { data: FlowData | undefined }) => {
+const FlowGraph = ({
+  data,
+  onDelete,
+  onSave,
+}: {
+  data: FlowData | undefined;
+  onDelete: () => void;
+  onSave: (data: SaveFlowBody) => void;
+}) => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [rawEdges, setRawEdges] = useState<RawEdge[]>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]); // uncontrolled via hook
@@ -84,7 +93,7 @@ const FlowGraph = ({ data }: { data: FlowData | undefined }) => {
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((snap) => applyNodeChanges(changes, snap)),
-    [],
+    []
   );
 
   useEffect(() => {
@@ -115,23 +124,23 @@ const FlowGraph = ({ data }: { data: FlowData | undefined }) => {
               color,
             },
           };
-        }),
+        })
       );
     },
-    [setEdges],
+    [setEdges]
   );
 
   const onNodeMouseEnter = useCallback(
     (_e: React.MouseEvent, node: Node) => applyHighlight(node.id),
-    [applyHighlight],
+    [applyHighlight]
   );
   const onNodeMouseLeave = useCallback(
     () => applyHighlight(null),
-    [applyHighlight],
+    [applyHighlight]
   );
   const onPaneMouseLeave = useCallback(
     () => applyHighlight(null),
-    [applyHighlight],
+    [applyHighlight]
   );
 
   /** --- compute the visible subset --- **/
@@ -142,7 +151,7 @@ const FlowGraph = ({ data }: { data: FlowData | undefined }) => {
     return {
       displayNodes: nodes.filter((n) => visible.has(n.id)),
       displayEdges: edges.filter(
-        (e) => visible.has(e.source) && visible.has(e.target),
+        (e) => visible.has(e.source) && visible.has(e.target)
       ),
     };
   }, [nodes, edges, filterRootId]);
@@ -183,9 +192,22 @@ const FlowGraph = ({ data }: { data: FlowData | undefined }) => {
               fitView
               onInit={setRf}
               style={{ background: "#00000010" }}
-            />
+            >
+              <Background />
+            </ReactFlow>
           </div>
         </div>
+        <GraphOptions
+          isFetched={!!data}
+          onDelete={onDelete}
+          onSave={(title) =>
+            onSave({
+              title,
+              data: initialData as unknown as FlowData,
+            })
+          }
+        />
+        <UnsavedLabel isSaved={!!data} />
       </ReactFlowProvider>
     </>
   );

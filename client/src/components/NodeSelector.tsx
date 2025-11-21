@@ -29,7 +29,7 @@ export default function NodeSelector({
   }, [nodes, q]);
 
   return (
-    <div className="w-[280px] h-[65%] p-3 border-r border-gray-200 bg-white flex flex-col gap-2 absolute right-5 bottom-[1%] z-10 rounded-[15px] shadow-lg">
+    <div className="w-[280px] h-[65%] p-3 border-r border-gray-200 bg-white flex flex-col gap-2 absolute right-5 bottom-[1%] z-10 rounded-lg shadow-lg text-sm 2xl:text-base">
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}

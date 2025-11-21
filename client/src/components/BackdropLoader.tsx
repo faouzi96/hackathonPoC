@@ -16,7 +16,7 @@ const BackdropLoader: React.FC<BackdropLoaderProps> = ({ show, children }) => {
         {children ?? (
           <div className="mr-10 flex items-center gap-2">
             <span className="loader border-4 border-t-4 border-gray-200 border-t-indigo-500 rounded-full w-8 h-8 animate-spin"></span>
-            <span className="text-white text-lg">Loading...</span>
+            <span className="text-white text-lg">Processing...</span>
           </div>
         )}
       </div>
