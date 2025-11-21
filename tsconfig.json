@@ -12,5 +12,5 @@
     "resolveJsonModule": true
   },
   "include": ["./**/*"],
-  "exclude": ["node_modules", "build", "client/src/*"]
+  "exclude": ["node_modules", "build", "client/*", "api/*"]
 }
