@@ -12,7 +12,6 @@ import {
 import { projectInfoCollector } from "./services/projectInfoCollector.js";
 import { userInfoCollector } from "./services/userInfoCollector.js";
 import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
-import { server } from "./services/server.js";
 import { execSync } from "child_process";
 import {
   codeAnalyzerAgentResponse,
@@ -20,6 +19,7 @@ import {
   graphAgentResponse,
 } from "./mocks/llmResponses.js";
 import "dotenv/config";
+import { select } from "@inquirer/prompts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,43 +79,47 @@ const pipeline = RunnableSequence.from([
 ]);
 
 async function main() {
-  await userInfoCollector();
+  const option = await select({
+    message: "Select an option!",
+    choices: ["Analyze Project", "Run Web Server"],
+  });
 
-  const { env, uri } = await projectInfoCollector();
+  if (option === "Analyze Project") {
+    await userInfoCollector();
 
-  if (env !== "Local") {
-    console.error("Feature is not yet available! Sorry!");
-    process.exit(0);
+    const { env, uri } = await projectInfoCollector();
+
+    if (env !== "Local") {
+      console.error("Feature is not yet available! Sorry!");
+      process.exit(0);
+    }
+
+    const response = await pipeline.invoke(uri);
+
+    console.info("Launching the FlowGraph UI...");
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("Building Client UI...");
+      execSync("npm run build", { cwd: path.join(__dirname, "client") });
+    }
+
+    console.log("Preparing Data...");
+    writeFileSync(
+      publicPath,
+      JSON.stringify(
+        { metadata: response.metadata, graph: JSON.parse(response.graph) },
+        null,
+        2
+      )
+    );
   }
-
-  const response = await pipeline.invoke(uri);
-
-  console.info("Launching the FlowGraph UI...");
-
-  if (process.env.NODE_ENV === "development") {
-    console.log("Building Client UI...");
-    execSync("npm run build", { cwd: path.join(__dirname, "client") });
-  }
-
-  console.log("Preparing Data...");
-  writeFileSync(
-    publicPath,
-    JSON.stringify(
-      { metadata: response.metadata, graph: JSON.parse(response.graph) },
-      null,
-      2
-    )
-  );
 
   console.log(
     "\x1b[32m%s\x1b[0m",
-    "FlowGraph UI Development Server Running on:"
+    "FlowAnalyzer Server Running on: http://localhost:3001"
   );
 
-  const PORT = 3001;
-  server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
+  execSync("npm run start", { cwd: path.join(__dirname, "api") });
 }
 
 main();

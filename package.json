@@ -2,15 +2,15 @@
   "name": "flow-analyzer",
   "version": "1.0.0",
   "type": "module",
-  "main": "build/orchestrator.js",
+  "main": "build/main.js",
   "bin": {
-    "flowAnalyzer": "build/orchestrator.js"
+    "flowAnalyzer": "build/main.js"
   },
   "scripts": {
     "app:package": "npm run pre-package && npm pack --prefix build",
     "pre-package": "node local-scripts/package-app.js",
     "build": "tsc",
-    "dev": "tsx orchestrator.ts",
+    "dev": "tsx main.ts",
     "mcp:server:dev": "tsx mcp-servers/mcp-server.ts",
     "mcp:server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run mcp:server:dev"
   },
