@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import type { Node } from "@xyflow/react";
-import icon from "../assets/flow.svg";
 
 type Props = {
   nodes: Node[];
@@ -30,94 +29,36 @@ export default function NodeSelector({
   }, [nodes, q]);
 
   return (
-    <aside
-      style={{
-        width: 280,
-        padding: 12,
-        borderRight: "1px solid #e5e7eb",
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-      }}
-    >
-      <div
-        style={{
-          fontWeight: 600,
-          fontSize: "20px",
-          color: "#000000e0",
-          textTransform: "uppercase",
-          borderBottom: "1px solid #00000020",
-          paddingBottom: 6,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-        }}
-      >
-        <img
-          src={icon}
-          alt="Flow Icon"
-          style={{
-            height: 35,
-          }}
-        />
-        <p>Flow Analyzer</p>
-      </div>
-
+    <div className="w-[280px] h-[65%] p-3 border-r border-gray-200 bg-white flex flex-col gap-2 absolute right-5 bottom-[1%] z-10 rounded-lg shadow-lg text-sm 2xl:text-base">
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder={placeholder}
-        style={{
-          padding: "8px 10px",
-          border: "1px solid #d1d5db",
-          borderRadius: 8,
-          outline: "none",
-        }}
+        className="px-2.5 py-2 border border-gray-300 rounded-lg outline-none"
       />
 
       <button
         onClick={onClear}
-        style={{
-          padding: "6px 8px",
-          borderRadius: 8,
-          border: "1px solid #d1d5db",
-          background: selectedId ? "white" : "#f3f4f6",
-          cursor: "pointer",
-          fontWeight: 400,
-        }}
+        className={`px-2 py-1.5 rounded-lg border border-gray-300 cursor-pointer font-normal ${
+          selectedId ? "bg-white" : "bg-gray-100"
+        }`}
         title="Show the whole graph"
       >
         Show all
       </button>
 
-      <div
-        style={{
-          overflowY: "auto",
-
-          borderTop: "1px solid #f3f4f6",
-          marginTop: 6,
-          bottom: 0,
-          flex: 1,
-        }}
-      >
-        {filtered.map((n) => {
+      <div className="overflow-y-auto border-t border-gray-100 mt-1 flex-1">
+        {filtered?.map((n) => {
           const active = n.id === selectedId;
           return (
             <div
               key={n.id}
               onClick={() => onSelect(n.id)}
-              style={{
-                width: "100%",
-                padding: "8px 10px",
-                borderBottom: "1px solid #f3f4f6",
-                cursor: "pointer",
-                borderRadius: 6,
-                background: active ? "#eef2ff" : "transparent",
-                fontWeight: active ? 400 : 200,
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-              }}
+              className={`w-full px-2.5 py-2 border-b border-gray-100 cursor-pointer rounded-md whitespace-nowrap text-ellipsis ${
+                active
+                  ? "bg-indigo-100 font-normal"
+                  : "bg-transparent font-extralight"
+              }`}
               title={nodeLabel(n)}
             >
               {nodeLabel(n)}
@@ -125,6 +66,6 @@ export default function NodeSelector({
           );
         })}
       </div>
-    </aside>
+    </div>
   );
 }

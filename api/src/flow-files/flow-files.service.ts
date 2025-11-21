@@ -61,7 +61,7 @@ export class FlowFilesService {
   async saveJsonFile(
     title: string,
     data: FlowData,
-  ): Promise<{ success: boolean; fileName?: string; message: string }> {
+  ): Promise<{ success: boolean; hashedName?: string; message: string }> {
     try {
       // Combine fields + ISO timestamp
       const isoDate = new Date().toISOString();
@@ -95,7 +95,7 @@ export class FlowFilesService {
 
       return {
         success: true,
-        fileName,
+        hashedName,
         message: `File saved successfully as ${fileName}`,
       };
     } catch (error) {
