@@ -18,11 +18,20 @@ import type { FlowData, SaveFlowBody } from "../types/app.types";
 import GraphOptions from "../components/GraphOptions";
 import UnsavedLabel from "../components/UnsavedLabel";
 
-const initialData = window.GRAPH_DATA;
+const initialData = window?.GRAPH_DATA;
 
-const { nodes: initialNodes, edges: initialEdges, title } = initialData.graph;
+const {
+  nodes: initialNodes,
+  edges: initialEdges,
+  title,
+} = initialData?.graph ?? { nodes: [], edges: [], title: "N/A" };
 
-const metadata = initialData.metadata;
+const metadata = initialData?.metadata ?? {
+  description: "N/A",
+  framework: "N/A",
+  ignorePatterns: [],
+  projectType: "N/A",
+};
 
 const DEFAULT_COLOR = "#333";
 const HOVER_COLOR = "red";
@@ -97,11 +106,13 @@ const FlowGraph = ({
   );
 
   useEffect(() => {
-    setRawEdges((data?.graph.edges as unknown as RawEdge[]) || initialEdges);
+    setRawEdges(
+      (data?.graph.edges as unknown as RawEdge[]) || initialEdges || []
+    );
   }, [data?.graph.edges]);
 
   useEffect(() => {
-    setNodes((data?.graph.nodes as unknown as Node[]) || initialNodes);
+    setNodes((data?.graph.nodes as unknown as Node[]) || initialNodes || []);
   }, [data?.graph.nodes]);
 
   useEffect(() => {
@@ -197,17 +208,21 @@ const FlowGraph = ({
             </ReactFlow>
           </div>
         </div>
-        <GraphOptions
-          isFetched={!!data}
-          onDelete={onDelete}
-          onSave={(title) =>
-            onSave({
-              title,
-              data: initialData as unknown as FlowData,
-            })
-          }
-        />
-        <UnsavedLabel isSaved={!!data} />
+        {nodes.length && (
+          <>
+            <GraphOptions
+              isFetched={!!data}
+              onDelete={onDelete}
+              onSave={(title) =>
+                onSave({
+                  title,
+                  data: initialData as unknown as FlowData,
+                })
+              }
+            />
+            <UnsavedLabel isSaved={!!data} />
+          </>
+        )}
       </ReactFlowProvider>
     </>
   );
