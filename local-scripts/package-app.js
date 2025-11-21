@@ -8,6 +8,10 @@ const __dirname = path.dirname(__filename);
 
 const source = path.resolve(__dirname, "../client/dist");
 const destination = path.resolve(__dirname, "../build/client/dist");
+const sourceApi = path.resolve(__dirname, "../api/dist");
+const destinationApi = path.resolve(__dirname, "../build/api/dist");
+const sourceApiPackage = path.resolve(__dirname, "../api");
+const destinationApiPackage = path.resolve(__dirname, "../build/api");
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.resolve(__dirname, "../build");
 
@@ -25,8 +29,26 @@ async function packageApp() {
     exec("npm run build", {
       cwd: path.join(__dirname, "client"),
     });
-
     await fs.copy(source, destination);
+
+    console.log("🚀 Building Nest Server...");
+    exec("npm run build", {
+      cwd: path.join(__dirname, "api"),
+    });
+    await fs.copy(sourceApi, destinationApi);
+    await fs.copy(
+      path.join(sourceApiPackage, "package.json"),
+      path.join(destinationApiPackage, "package.json")
+    );
+    await fs.copy(
+      path.join(sourceApiPackage, "package-lock.json"),
+      path.join(destinationApiPackage, "package-lock.json")
+    );
+    console.log("🚀 Installing Nest Server dependencies...");
+    exec("npm install", {
+      cwd: path.join(destinationApiPackage),
+    });
+
     console.log("✅ Orchestrator and client build completed successfully.");
 
     console.log("🚀 Packing the application...");

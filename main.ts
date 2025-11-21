@@ -101,6 +101,8 @@ async function main() {
     if (process.env.NODE_ENV === "development") {
       console.log("Building Client UI...");
       execSync("npm run build", { cwd: path.join(__dirname, "client") });
+      console.log("Building Server App...");
+      execSync("npm run build", { cwd: path.join(__dirname, "api") });
     }
 
     console.log("Preparing Data...");
@@ -119,7 +121,7 @@ async function main() {
     "FlowAnalyzer Server Running on: http://localhost:3001"
   );
 
-  execSync("npm run start", { cwd: path.join(__dirname, "api") });
+  execSync("npm run start:prod", { cwd: path.join(__dirname, "api") });
 }
 
 main();
