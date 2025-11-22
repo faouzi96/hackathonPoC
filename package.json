@@ -7,7 +7,7 @@
     "flowAnalyzer": "main.js"
   },
   "scripts": {
-    "app:package": "npm run pre-package && cd build && npm pack",
+    "app:package": "npm run pre-package && cd build && if not exist files-storage mkdir files-storage && npm pack",
     "pre-package": "node local-scripts/package-app.js",
     "build": "tsc && if not exist build\\api mkdir build\\api && if not exist build\\client mkdir build\\client",
     "dev": "tsx main.ts",

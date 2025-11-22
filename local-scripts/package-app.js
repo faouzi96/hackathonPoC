@@ -47,17 +47,24 @@ async function packageApp() {
     console.log("🛠️  Building React app...");
     await execAsync("npm run build", { cwd: path.join(__dirname, "client") });
 
-    console.log("📦➡️ Moving necessary files...");
+    console.log("📦➡️  Moving and Creating necessary files...");
     await fs.copy(source, destination);
     await fs.copy(sourceApi, destinationApi);
     await fs.copy(
       path.join(sourceApiPackage, "package.json"),
-      path.join(destinationApiPackage, "package.json"),
+      path.join(destinationApiPackage, "package.json")
     );
     await fs.copy(
       path.join(sourceApiPackage, "package-lock.json"),
-      path.join(destinationApiPackage, "package-lock.json"),
+      path.join(destinationApiPackage, "package-lock.json")
     );
+
+    await fs.promises.writeFile(
+      path.join(__dirname, "build", "flowData.json"),
+      "[]",
+      "utf-8"
+    );
+
     console.log("📦 Installing Nest Server dependencies...");
     await execAsync("npm install", { cwd: path.join(destinationApiPackage) });
 
@@ -67,11 +74,11 @@ async function packageApp() {
 
     await fs.copy(
       path.join(rootDir, "package.json"),
-      path.join(buildDir, "package.json"),
+      path.join(buildDir, "package.json")
     );
     await fs.copy(
       path.join(rootDir, "package-lock.json"),
-      path.join(buildDir, "package-lock.json"),
+      path.join(buildDir, "package-lock.json")
     );
 
     console.log("✅ Application ready to be packaged!");
