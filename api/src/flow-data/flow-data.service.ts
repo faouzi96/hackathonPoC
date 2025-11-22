@@ -3,7 +3,7 @@ import {
   InternalServerErrorException,
   Scope,
 } from '@nestjs/common';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as path from 'path';
 import type { FlowOverview } from 'types/app.types';
 
