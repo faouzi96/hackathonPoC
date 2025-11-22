@@ -38,13 +38,13 @@ function execAsync(command, options = {}) {
 
 async function packageApp() {
   try {
-    console.log("🛠️ Building Node.js app...");
+    console.log("🛠️  Building Node.js app...");
     await execAsync("npm run build", { cwd: __dirname });
 
-    console.log("🛠️ Building Nest Server...");
+    console.log("🛠️  Building Nest Server...");
     await execAsync("npm run build", { cwd: path.join(__dirname, "api") });
 
-    console.log("🛠️ Building React app...");
+    console.log("🛠️  Building React app...");
     await execAsync("npm run build", { cwd: path.join(__dirname, "client") });
 
     console.log("📦➡️ Moving necessary files...");
