@@ -7,6 +7,7 @@ type Props = {
   onSelect: (id: string) => void;
   onClear: () => void;
   placeholder?: string;
+  isDescriptionVisible: boolean;
 };
 
 function nodeLabel(n: Node): string {
@@ -19,6 +20,7 @@ export default function NodeSelector({
   onSelect,
   onClear,
   placeholder = "Nodes Filter…",
+  isDescriptionVisible,
 }: Props) {
   const [q, setQ] = useState("");
 
@@ -29,7 +31,11 @@ export default function NodeSelector({
   }, [nodes, q]);
 
   return (
-    <div className="w-[280px] h-[65%] p-3 border-r border-gray-200 bg-white flex flex-col gap-2 absolute right-5 bottom-[1%] z-10 rounded-lg shadow-lg text-sm 2xl:text-base">
+    <div
+      className={`w-[280px] ${
+        isDescriptionVisible ? "h-[65%]" : "h-[90%]"
+      } p-3 border-r border-gray-200 bg-white flex flex-col gap-2 absolute right-5 bottom-[1%] z-10 rounded-lg shadow-lg text-sm 2xl:text-base transition-all duration-300`}
+    >
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
