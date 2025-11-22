@@ -199,7 +199,7 @@ const FlowGraph = ({
             isDescriptionVisible={isDescriptionVisible}
           />
           {/* CANVAS */}
-          <div className="flex-1">
+          <div className="flex-1 h-screen">
             <ReactFlow
               nodes={displayNodes}
               edges={displayEdges}
