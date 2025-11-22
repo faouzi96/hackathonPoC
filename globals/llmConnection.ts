@@ -1,7 +1,6 @@
 import { createAzure } from "@ai-sdk/azure";
 import { getUserInfo } from "../services/userInfoCollector.js";
-import { openai } from "@ai-sdk/openai";
-import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
+import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI, google } from "@ai-sdk/google";
 import { createOllama, ollama } from "ollama-ai-provider-v2";
 import { createOpenAI } from "@ai-sdk/openai";

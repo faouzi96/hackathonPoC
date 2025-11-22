@@ -30,7 +30,7 @@ const publicPath = path.join(__dirname, "client", "dist", "data.json");
 const describerAgentRunnable = RunnableLambda.from(async (uri: string) => {
   console.info(
     "\x1b[34m%s\x1b[0m",
-    "🤖 Agent 1: Analyzing and Describing the Project...",
+    "🤖 Agent 1: Analyzing and Describing the Project..."
   );
   if (process.env.NODE_ENV === "development")
     return { uri, metadata: describerAgentResponse };
@@ -43,7 +43,7 @@ const codeAnalyzerAgentRunnable = RunnableLambda.from(
   async (args: { uri: string; metadata: Metadata }) => {
     console.info(
       "\x1b[34m%s\x1b[0m",
-      "🧠 Agent 2: Loading and Analyzing File Content...",
+      "🧠 Agent 2: Loading and Analyzing File Content..."
     );
     if (process.env.NODE_ENV === "development")
       return {
@@ -53,14 +53,14 @@ const codeAnalyzerAgentRunnable = RunnableLambda.from(
 
     const data = await localMcpClientCodeAnalyser(args.uri, args.metadata);
     return { data: data, metadata: args.metadata };
-  },
+  }
 );
 
 const graphAgentRunnable = RunnableLambda.from(
   async (agrs: { data: string; metadata: Metadata }) => {
     console.info(
       "\x1b[34m%s\x1b[0m",
-      "🔗 Agent 3: Generating the Project Graph...",
+      "🔗 Agent 3: Generating the Project Graph..."
     );
     if (process.env.NODE_ENV === "development")
       return {
@@ -70,7 +70,7 @@ const graphAgentRunnable = RunnableLambda.from(
 
     const graph = await getProjectStructure(agrs.data);
     return { graph: graph, metadata: agrs.metadata };
-  },
+  }
 );
 
 const pipeline = RunnableSequence.from([
@@ -80,6 +80,13 @@ const pipeline = RunnableSequence.from([
 ]);
 
 async function main() {
+  if (process.env.NODE_ENV === "development") {
+    console.log("🛠️  Building Client UI...");
+    execSync("npm run build", { cwd: path.join(__dirname, "client") });
+    console.log("🛠️  Building Server App...");
+    execSync("npm run build", { cwd: path.join(__dirname, "api") });
+  }
+
   const option = await select({
     message: "Select an option!",
     choices: ["Analyze Project", "Run Web Server"],
@@ -99,27 +106,20 @@ async function main() {
 
     console.info("🚀 Launching the FlowGraph UI...");
 
-    if (process.env.NODE_ENV === "development") {
-      console.log("🛠️  Building Client UI...");
-      execSync("npm run build", { cwd: path.join(__dirname, "client") });
-      console.log("🛠️  Building Server App...");
-      execSync("npm run build", { cwd: path.join(__dirname, "api") });
-    }
-
     console.log("📦 Preparing Data...");
     writeFileSync(
       publicPath,
       JSON.stringify(
         { metadata: response.metadata, graph: JSON.parse(response.graph) },
         null,
-        2,
-      ),
+        2
+      )
     );
   }
 
   console.log(
     "\x1b[32m%s\x1b[0m",
-    "🌐 FlowAnalyzer Server Running on: http://localhost:3001",
+    "🌐 FlowAnalyzer Server Running on: http://localhost:3001"
   );
 
   execSync("npm run start:prod", { cwd: path.join(__dirname, "api") });

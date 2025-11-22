@@ -102,6 +102,8 @@ const FlowGraph = ({
 
   const flowMetadata = useMemo(() => data?.metadata || metadata, [data]);
 
+  const namedProject = useMemo(() => data?.graph.title || title, [data]);
+
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((snap) => applyNodeChanges(changes, snap)),
     []
@@ -183,7 +185,7 @@ const FlowGraph = ({
   return (
     <>
       <ViewTitle
-        title={title}
+        title={namedProject}
         metadata={flowMetadata}
         isVisible={isDescriptionVisible}
         setIsVisible={setIsDescriptionVisible}
