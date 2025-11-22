@@ -91,6 +91,8 @@ const FlowGraph = ({
   onDelete: () => void;
   onSave: (data: SaveFlowBody) => void;
 }) => {
+  const [isDescriptionVisible, setIsDescriptionVisible] =
+    useState<boolean>(true);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [rawEdges, setRawEdges] = useState<RawEdge[]>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]); // uncontrolled via hook
@@ -180,7 +182,12 @@ const FlowGraph = ({
 
   return (
     <>
-      <ViewTitle title={title} metadata={flowMetadata} />
+      <ViewTitle
+        title={title}
+        metadata={flowMetadata}
+        isVisible={isDescriptionVisible}
+        setIsVisible={setIsDescriptionVisible}
+      />
       <ReactFlowProvider>
         <div className="flex flex-1 min-h-0">
           {/* LEFT SIDEBAR: separate file */}
@@ -189,6 +196,7 @@ const FlowGraph = ({
             selectedId={filterRootId}
             onSelect={setFilterRootId}
             onClear={() => setFilterRootId(null)}
+            isDescriptionVisible={isDescriptionVisible}
           />
           {/* CANVAS */}
           <div className="flex-1">
