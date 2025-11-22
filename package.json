@@ -11,6 +11,7 @@
     "pre-package": "node local-scripts/package-app.js",
     "build": "tsc && if not exist build\\api mkdir build\\api && if not exist build\\client mkdir build\\client",
     "dev": "tsx main.ts",
+    "start": "npm run pre-package && node build/main.js",
     "mcp:server:dev": "tsx mcp-servers/mcp-server.ts",
     "mcp:server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run mcp:server:dev"
   },
