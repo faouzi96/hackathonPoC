@@ -37,7 +37,7 @@ async function collectInfo() {
   try {
     const provider = await select({
       message: "Select your LLM Provider!",
-      choices: ["Azure OpenAI", "Others (not ready)"],
+      choices: ["Azure OpenAI", "Gemini API", "Others (not ready)"],
     });
 
     if (provider === "Azure OpenAI") {
@@ -67,6 +67,22 @@ async function collectInfo() {
         message: "Enter your Azure Model Name:",
       });
       saveUserInfo("AZURE_MODEL_NAME", model);
+    } else if (provider === "Gemini API") {
+      const baseURL = await input({
+        message:
+          "Enter your Gemini Endpoint (e.g., https://generativelanguage.googleapis.com/v1beta/models/):",
+      });
+      saveUserInfo("GOOGLE_BASE_URL", baseURL);
+
+      const apiKey = await input({
+        message: "Enter your Gemini API Key:",
+      });
+      saveUserInfo("GOOGLE_API_KEY", apiKey);
+
+      const model = await input({
+        message: "Enter your Gemini model name:",
+      });
+      saveUserInfo("GOOGLE_MODEL_NAME", model);
     } else {
       console.error("Feature is not yet available! Sorry!");
       process.exit(0);
@@ -96,7 +112,7 @@ function checkUserInfoExists(): boolean {
 export async function userInfoCollector(): Promise<void> {
   if (!checkUserInfoExists()) {
     console.log(
-      "User information is incomplete. Please provide the missing information."
+      "User information is incomplete. Please provide the missing information.",
     );
     await collectInfo();
   } else {

@@ -1,8 +1,8 @@
 import { createAzure } from "@ai-sdk/azure";
 import { getUserInfo } from "../services/userInfoCollector.js";
 import { createAnthropic } from "@ai-sdk/anthropic";
-import { createGoogleGenerativeAI, google } from "@ai-sdk/google";
-import { createOllama, ollama } from "ollama-ai-provider-v2";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOllama } from "ollama-ai-provider-v2";
 import { createOpenAI } from "@ai-sdk/openai";
 
 const AZURE_AI_KEY = getUserInfo("AZURE_AI_KEY");
