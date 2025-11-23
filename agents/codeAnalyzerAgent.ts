@@ -18,7 +18,7 @@ const mcpClient = new Client(
       sampling: {},
     },
     enforceStrictCapabilities: true,
-  }
+  },
 );
 
 const transport = new StdioClientTransport({
@@ -31,7 +31,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
   const messages: ModelMessage[] = [...query];
 
   const response = await generateText({
-    model: llmConnection,
+    model: llmConnection(),
     prompt: JSON.stringify(messages),
     tools: tools.reduce(
       (obj, t) => ({
@@ -47,7 +47,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
           },
         }),
       }),
-      {}
+      {},
     ),
   });
 
@@ -66,7 +66,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
       });
 
       console.log(
-        `[Calling tool ${toolName} with arguments: ${toolArgs?.path}]`
+        `[Calling tool ${toolName} with arguments: ${toolArgs?.path}]`,
       );
       const newMessages: ModelMessage[] = [
         ...messages,
@@ -81,7 +81,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
       ];
 
       const finalResponse = await generateText({
-        model: llmConnection,
+        model: llmConnection(),
         prompt: JSON.stringify(newMessages),
         maxOutputTokens: 1000,
       });
@@ -89,7 +89,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
       finalText.push(
         finalResponse.content[0].type === "text"
           ? finalResponse.content[0].text
-          : ""
+          : "",
       );
     }
   }
@@ -99,10 +99,10 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
 
 export async function localMcpClientCodeAnalyser(
   uri: string,
-  metadata: Metadata
+  metadata: Metadata,
 ) {
   const files = (await getAllFilePaths(uri, metadata.ignorePatterns)).join(
-    "\n"
+    "\n",
   );
   const fileContext = `\n\nList of the files:
   \n${files}`;
@@ -129,7 +129,7 @@ export async function localMcpClientCodeAnalyser(
 
 async function getAllFilePaths(
   folderPath: string,
-  ignorePatterns: string[] = []
+  ignorePatterns: string[] = [],
 ) {
   const result: string[] = [];
 

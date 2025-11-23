@@ -13,7 +13,7 @@ export type Metadata = {
 
 async function queryProcessing(message: ModelMessage) {
   const finalResponse = await generateText({
-    model: llmConnection,
+    model: llmConnection(),
     prompt: JSON.stringify(message),
   });
 

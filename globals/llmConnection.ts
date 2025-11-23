@@ -4,6 +4,7 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOllama } from "ollama-ai-provider-v2";
 import { createOpenAI } from "@ai-sdk/openai";
+import { LlmProvider } from "../types/app.types.js";
 
 const AZURE_AI_KEY = getUserInfo("AZURE_AI_KEY");
 const AZURE_AI_API_VERSION = getUserInfo("AZURE_AI_API_VERSION");
@@ -41,25 +42,33 @@ export const anthropicLlmConnection = createAnthropic({
 const GOOGLE_BASE_URL = getUserInfo("GOOGLE_BASE_URL");
 const GOOGLE_API_KEY = getUserInfo("GOOGLE_API_KEY");
 const GOOGLE_MODEL_NAME = getUserInfo("GOOGLE_MODEL_NAME");
-export const googleLlmConnection = GOOGLE_BASE_URL
-  ? createGoogleGenerativeAI({
-      baseURL: GOOGLE_BASE_URL,
-      apiKey: GOOGLE_API_KEY,
-    })(GOOGLE_MODEL_NAME)
-  : createGoogleGenerativeAI({
-      apiKey: GOOGLE_API_KEY,
-    })(GOOGLE_MODEL_NAME);
+export const googleLlmConnection =
+  GOOGLE_BASE_URL !== "undefined"
+    ? createGoogleGenerativeAI({
+        baseURL: GOOGLE_BASE_URL,
+        apiKey: GOOGLE_API_KEY,
+      })(GOOGLE_MODEL_NAME)
+    : createGoogleGenerativeAI({
+        apiKey: GOOGLE_API_KEY,
+      })(GOOGLE_MODEL_NAME);
 
 // Ollama (local)
 const OLLAMA_BASE_URL = getUserInfo("OLLAMA_BASE_URL");
 const OLLAMA_API_KEY = getUserInfo("OLLAMA_API_KEY");
 const OLLAMA_MODEL_NAME = getUserInfo("OLLAMA_MODEL_NAME");
-export const ollamaLlmConnection = createOllama({
-  baseURL: OLLAMA_BASE_URL,
-  headers: {
-    Authorization: OLLAMA_API_KEY,
-  },
-})(OLLAMA_MODEL_NAME);
+export const ollamaLlmConnection =
+  OLLAMA_BASE_URL !== "undefined"
+    ? createOllama({
+        baseURL: OLLAMA_BASE_URL,
+        headers: {
+          Authorization: OLLAMA_API_KEY,
+        },
+      })(OLLAMA_MODEL_NAME)
+    : createOllama({
+        headers: {
+          Authorization: OLLAMA_API_KEY,
+        },
+      })(OLLAMA_MODEL_NAME);
 
 // vLLM (local)
 const VLLM_BASE_URL = getUserInfo("VLLM_BASE_URL");
@@ -71,23 +80,14 @@ const vllmProvider = createOpenAI({
 });
 export const vllmLlmConnection = vllmProvider(VLLM_MODEL_NAME);
 
-// Define the type for LLM provider names
-export type LlmProvider =
-  | "Azure"
-  | "Openai"
-  | "Anthropic"
-  | "Google"
-  | "Ollama"
-  | "vllm";
-
 // Method to get LLM connection based on provider name
-export function getLlmConnection(provider: string) {
+export function getLlmConnection(provider: LlmProvider) {
   switch (provider) {
     case "Azure":
       return azureLlmConnection;
     case "Openai":
       return openaiLlmConnection;
-    case "anthropic":
+    case "Anthropic":
       return anthropicLlmConnection;
     case "Google":
       return googleLlmConnection;
@@ -101,4 +101,5 @@ export function getLlmConnection(provider: string) {
 }
 
 // Default connection (can be switched based on environment)
-export const llmConnection = getLlmConnection(getUserInfo("PROVIDER"));
+export const llmConnection = () =>
+  getLlmConnection(getUserInfo("PROVIDER") as LlmProvider);

@@ -1,30 +1,9 @@
 import { confirm, input, select } from "@inquirer/prompts";
 import { LocalStorage } from "node-localstorage";
+import { LMM_CONNECTION_PARAMS } from "../utils/constants.js";
+import { UserInfo } from "../types/app.types.js";
 
 const localStorage = new LocalStorage("./creds");
-
-type UserInfo =
-  | "PROVIDER"
-  | "AZURE_AI_ENDPOINT"
-  | "AZURE_AI_KEY"
-  | "AZURE_AI_API_VERSION"
-  | "AZURE_RESOURCE_NAME"
-  | "AZURE_MODEL_NAME"
-  | "OPENAI_BASE_URL"
-  | "OPENAI_API_KEY"
-  | "OPENAI_MODEL_NAME"
-  | "ANTHROPIC_BASE_URL"
-  | "ANTHROPIC_API_KEY"
-  | "ANTHROPIC_MODEL_NAME"
-  | "GOOGLE_BASE_URL"
-  | "GOOGLE_API_KEY"
-  | "GOOGLE_MODEL_NAME"
-  | "OLLAMA_BASE_URL"
-  | "OLLAMA_API_KEY"
-  | "OLLAMA_MODEL_NAME"
-  | "VLLM_BASE_URL"
-  | "VLLM_MODEL_NAME"
-  | "VLLM_API_KEY";
 
 export function saveUserInfo(key: UserInfo, value: string): void {
   localStorage.setItem(key, value);
@@ -34,61 +13,78 @@ export function getUserInfo(key: UserInfo): string {
   return localStorage.getItem(key) || "";
 }
 
-async function collectInfo() {
+async function collectInfo(provider: string) {
   try {
-    const provider: string = await select({
-      message: "Select your LLM Provider!",
-      choices: ["Azure", "Google", "Others (not ready)"],
-    });
+    switch (provider) {
+      case "Azure": {
+        const baseURL = await input({
+          message:
+            "Enter your Azure OpenAI Endpoint (e.g., https://your-resource.openai.azure.com/):",
+        });
+        saveUserInfo("AZURE_AI_ENDPOINT", baseURL);
 
-    if (provider !== "Others (not ready)") saveUserInfo("PROVIDER", provider);
+        const apiKey = await input({
+          message: "Enter your Azure OpenAI API Key:",
+        });
+        saveUserInfo("AZURE_AI_KEY", apiKey);
 
-    if (provider === "Azure") {
-      const baseURL = await input({
-        message:
-          "Enter your Azure OpenAI Endpoint (e.g., https://your-resource.openai.azure.com/):",
-      });
-      saveUserInfo("AZURE_AI_ENDPOINT", baseURL);
+        const apiVersion = await input({
+          message:
+            "Enter your Azure OpenAI API Version (e.g., 2024-02-15-preview):",
+        });
+        saveUserInfo("AZURE_AI_API_VERSION", apiVersion);
 
-      const apiKey = await input({
-        message: "Enter your Azure OpenAI API Key:",
-      });
-      saveUserInfo("AZURE_AI_KEY", apiKey);
+        const resourceName = await input({
+          message: "Enter your Azure Resource Name:",
+        });
+        saveUserInfo("AZURE_RESOURCE_NAME", resourceName);
 
-      const apiVersion = await input({
-        message:
-          "Enter your Azure OpenAI API Version (e.g., 2024-02-15-preview):",
-      });
-      saveUserInfo("AZURE_AI_API_VERSION", apiVersion);
+        const model = await input({
+          message: "Enter your Azure Model Name:",
+        });
+        saveUserInfo("AZURE_MODEL_NAME", model);
+        break;
+      }
+      case "Google": {
+        const baseURL = await input({
+          message:
+            "[Optional] Enter your Gemini Endpoint (e.g., https://generativelanguage.googleapis.com/v1beta/models/):",
+        });
+        saveUserInfo("GOOGLE_BASE_URL", baseURL ?? "undefined");
 
-      const resourceName = await input({
-        message: "Enter your Azure Resource Name:",
-      });
-      saveUserInfo("AZURE_RESOURCE_NAME", resourceName);
+        const apiKey = await input({
+          message: "Enter your Gemini API Key:",
+        });
+        saveUserInfo("GOOGLE_API_KEY", apiKey);
 
-      const model = await input({
-        message: "Enter your Azure Model Name:",
-      });
-      saveUserInfo("AZURE_MODEL_NAME", model);
-    } else if (provider === "Google") {
-      const baseURL = await input({
-        message:
-          "Enter your Gemini Endpoint (e.g., https://generativelanguage.googleapis.com/v1beta/models/):",
-      });
-      saveUserInfo("GOOGLE_BASE_URL", baseURL);
+        const model = await input({
+          message: "Enter your Gemini model name:",
+        });
+        saveUserInfo("GOOGLE_MODEL_NAME", model);
+        break;
+      }
+      case "Ollama":
+        const baseURL = await input({
+          message:
+            "[Optional] Enter your Ollama Endpoint (e.g., http://localhost:11434):",
+        });
+        saveUserInfo("OLLAMA_BASE_URL", baseURL ?? "undefined");
 
-      const apiKey = await input({
-        message: "Enter your Gemini API Key:",
-      });
-      saveUserInfo("GOOGLE_API_KEY", apiKey);
+        const apiKey = await input({
+          message: "[Optional] Enter your Ollama API Key / Authorization Header:",
+        });
+        saveUserInfo("OLLAMA_API_KEY", apiKey ?? "undefined");
 
-      const model = await input({
-        message: "Enter your Gemini model name:",
-      });
-      saveUserInfo("GOOGLE_MODEL_NAME", model);
-    } else {
-      console.error("Feature is not yet available! Sorry!");
-      process.exit(0);
+        const model = await input({
+          message: "Enter your Ollama model name:",
+        });
+        saveUserInfo("OLLAMA_MODEL_NAME", model);
+        break;
+
+      default: {
+        console.error("Feature is not yet available! Sorry!");
+        process.exit(0);
+      }
     }
   } catch (error) {
     console.error("Error collecting user information:", error);
@@ -97,13 +93,11 @@ async function collectInfo() {
 }
 
 function checkUserInfoExists(): boolean {
-  const requiredKeys: UserInfo[] = [
-    "AZURE_AI_ENDPOINT",
-    "AZURE_AI_KEY",
-    "AZURE_AI_API_VERSION",
-    "AZURE_RESOURCE_NAME",
-    "AZURE_MODEL_NAME",
-  ];
+  const provider = getUserInfo("PROVIDER");
+  const requiredKeys: UserInfo[] = LMM_CONNECTION_PARAMS.filter((key) =>
+    key.includes(provider.toUpperCase()),
+  ) as UserInfo[];
+
   for (const key of requiredKeys) {
     if (!getUserInfo(key)) {
       return false;
@@ -113,11 +107,18 @@ function checkUserInfoExists(): boolean {
 }
 
 export async function userInfoCollector(): Promise<void> {
+  const provider: string = await select({
+    message: "Select your LLM Provider!",
+    choices: ["Azure", "Google", "Ollama", "Others (not ready)"],
+  });
+
+  if (provider !== "Others (not ready)") saveUserInfo("PROVIDER", provider);
+
   if (!checkUserInfoExists()) {
     console.log(
-      "User information is incomplete. Please provide the missing information."
+      "User information is incomplete. Please provide the missing information.",
     );
-    await collectInfo();
+    await collectInfo(provider);
   } else {
     console.log("All required user information are already provided.");
     const confirmation = await confirm({
@@ -125,7 +126,7 @@ export async function userInfoCollector(): Promise<void> {
       default: false,
     });
     if (confirmation) {
-      await collectInfo();
+      await collectInfo(provider);
     }
   }
 }
