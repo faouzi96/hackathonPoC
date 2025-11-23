@@ -32,7 +32,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
 
   const response = await generateText({
     model: llmConnection,
-    prompt: messages,
+    prompt: JSON.stringify(messages),
     tools: tools.reduce(
       (obj, t) => ({
         ...obj,
@@ -82,7 +82,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
 
       const finalResponse = await generateText({
         model: llmConnection,
-        messages: newMessages,
+        prompt: JSON.stringify(newMessages),
         maxOutputTokens: 1000,
       });
 

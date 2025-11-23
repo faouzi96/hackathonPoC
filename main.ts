@@ -21,6 +21,7 @@ import {
 import "dotenv/config";
 import { select } from "@inquirer/prompts";
 import { deleteRepo } from "./services/gitRepoManager.js";
+import { parseLlmResponse } from "./utils/parseLlmResponse.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -110,7 +111,10 @@ async function main() {
     writeFileSync(
       publicPath,
       JSON.stringify(
-        { metadata: response.metadata, graph: JSON.parse(response.graph) },
+        {
+          metadata: response.metadata,
+          graph: parseLlmResponse(response.graph),
+        },
         null,
         2
       )
