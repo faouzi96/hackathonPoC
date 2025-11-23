@@ -4,6 +4,7 @@ import { LocalStorage } from "node-localstorage";
 const localStorage = new LocalStorage("./creds");
 
 type UserInfo =
+  | "PROVIDER"
   | "AZURE_AI_ENDPOINT"
   | "AZURE_AI_KEY"
   | "AZURE_AI_API_VERSION"
@@ -35,12 +36,14 @@ export function getUserInfo(key: UserInfo): string {
 
 async function collectInfo() {
   try {
-    const provider = await select({
+    const provider: string = await select({
       message: "Select your LLM Provider!",
-      choices: ["Azure OpenAI", "Gemini API", "Others (not ready)"],
+      choices: ["Azure", "Google", "Others (not ready)"],
     });
 
-    if (provider === "Azure OpenAI") {
+    if (provider !== "Others (not ready)") saveUserInfo("PROVIDER", provider);
+
+    if (provider === "Azure") {
       const baseURL = await input({
         message:
           "Enter your Azure OpenAI Endpoint (e.g., https://your-resource.openai.azure.com/):",
@@ -67,7 +70,7 @@ async function collectInfo() {
         message: "Enter your Azure Model Name:",
       });
       saveUserInfo("AZURE_MODEL_NAME", model);
-    } else if (provider === "Gemini API") {
+    } else if (provider === "Google") {
       const baseURL = await input({
         message:
           "Enter your Gemini Endpoint (e.g., https://generativelanguage.googleapis.com/v1beta/models/):",
@@ -112,11 +115,11 @@ function checkUserInfoExists(): boolean {
 export async function userInfoCollector(): Promise<void> {
   if (!checkUserInfoExists()) {
     console.log(
-      "User information is incomplete. Please provide the missing information.",
+      "User information is incomplete. Please provide the missing information."
     );
     await collectInfo();
   } else {
-    console.log("All required user information is already provided.");
+    console.log("All required user information are already provided.");
     const confirmation = await confirm({
       message: "Do you want to update your information?",
       default: false,

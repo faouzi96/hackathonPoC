@@ -41,10 +41,14 @@ export const anthropicLlmConnection = createAnthropic({
 const GOOGLE_BASE_URL = getUserInfo("GOOGLE_BASE_URL");
 const GOOGLE_API_KEY = getUserInfo("GOOGLE_API_KEY");
 const GOOGLE_MODEL_NAME = getUserInfo("GOOGLE_MODEL_NAME");
-export const googleLlmConnection = createGoogleGenerativeAI({
-  baseURL: GOOGLE_BASE_URL,
-  apiKey: GOOGLE_API_KEY,
-})(GOOGLE_MODEL_NAME);
+export const googleLlmConnection = GOOGLE_BASE_URL
+  ? createGoogleGenerativeAI({
+      baseURL: GOOGLE_BASE_URL,
+      apiKey: GOOGLE_API_KEY,
+    })(GOOGLE_MODEL_NAME)
+  : createGoogleGenerativeAI({
+      apiKey: GOOGLE_API_KEY,
+    })(GOOGLE_MODEL_NAME);
 
 // Ollama (local)
 const OLLAMA_BASE_URL = getUserInfo("OLLAMA_BASE_URL");
@@ -69,25 +73,25 @@ export const vllmLlmConnection = vllmProvider(VLLM_MODEL_NAME);
 
 // Define the type for LLM provider names
 export type LlmProvider =
-  | "azure"
-  | "openai"
-  | "anthropic"
-  | "google"
-  | "ollama"
+  | "Azure"
+  | "Openai"
+  | "Anthropic"
+  | "Google"
+  | "Ollama"
   | "vllm";
 
 // Method to get LLM connection based on provider name
-export function getLlmConnection(provider: LlmProvider) {
+export function getLlmConnection(provider: string) {
   switch (provider) {
-    case "azure":
+    case "Azure":
       return azureLlmConnection;
-    case "openai":
+    case "Openai":
       return openaiLlmConnection;
     case "anthropic":
       return anthropicLlmConnection;
-    case "google":
+    case "Google":
       return googleLlmConnection;
-    case "ollama":
+    case "Ollama":
       return ollamaLlmConnection;
     case "vllm":
       return vllmLlmConnection;
@@ -97,4 +101,4 @@ export function getLlmConnection(provider: LlmProvider) {
 }
 
 // Default connection (can be switched based on environment)
-export const llmConnection = azureLlmConnection;
+export const llmConnection = getLlmConnection(getUserInfo("PROVIDER"));
