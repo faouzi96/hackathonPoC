@@ -8,6 +8,7 @@ type Props = {
   deleteLabel?: string;
   className?: string;
   isFetched: boolean;
+  isVisible: boolean;
 };
 
 const GraphOptions: React.FC<Props> = ({
@@ -17,12 +18,13 @@ const GraphOptions: React.FC<Props> = ({
   deleteLabel = "Delete",
   className = "",
   isFetched,
+  isVisible,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  if (!isVisible) return;
   return (
     <div
-      className={`w-fit absolute right-[350px] top-2.5 inline-flex items-center gap-3 border border-gray-200 bg-white px-3 py-2 rounded-[10px] shadow-sm text-sm ${className}`}
+      className={`w-fit absolute right-[350px] top-2.5 inline-flex items-center gap-3 border border-gray-200 bg-white px-3 py-2 rounded-[10px] shadow-sm text-sm z-10 ${className}`}
       role="group"
       aria-label="Graph options"
     >

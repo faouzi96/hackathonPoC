@@ -17,6 +17,7 @@ import ViewTitle from "../components/ViewTitle";
 import type { FlowData, SaveFlowBody } from "../types/app.types";
 import GraphOptions from "../components/GraphOptions";
 import UnsavedLabel from "../components/UnsavedLabel";
+import DownloadFlow from "../components/DownloadFlow";
 
 const initialData = window?.GRAPH_DATA;
 
@@ -215,24 +216,25 @@ const FlowGraph = ({
               style={{ background: "#00000010" }}
             >
               <Background />
+              <GraphOptions
+                isVisible={!!nodes.length}
+                isFetched={!!data}
+                onDelete={onDelete}
+                onSave={(title) =>
+                  onSave({
+                    title,
+                    data: initialData as unknown as FlowData,
+                  })
+                }
+              />
+              <DownloadFlow
+                isVisible={!!nodes.length}
+                title={namedProject || "unknown"}
+              />
+              <UnsavedLabel isSaved={!!data} isVisible={!!nodes.length} />
             </ReactFlow>
           </div>
         </div>
-        {nodes.length && (
-          <>
-            <GraphOptions
-              isFetched={!!data}
-              onDelete={onDelete}
-              onSave={(title) =>
-                onSave({
-                  title,
-                  data: initialData as unknown as FlowData,
-                })
-              }
-            />
-            <UnsavedLabel isSaved={!!data} />
-          </>
-        )}
       </ReactFlowProvider>
     </>
   );
