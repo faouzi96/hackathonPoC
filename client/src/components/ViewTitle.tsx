@@ -16,8 +16,8 @@ const ViewTitle = ({
   return (
     <div
       className={`w-[280px] ${
-        isVisible ? "h-[30%] overflow-y-auto" : "h-[35px] overflow-hidden"
-      } py-1 px-4 border-r border-gray-200 bg-white flex flex-col justify-center gap-2 absolute right-5 top-3 text-xs 2xl:text-sm z-10 rounded-lg shadow-lg transition-all duration-300`}
+        isVisible ? "h-[30%] overflow-auto" : "h-[35px] overflow-hidden"
+      } py-1 px-4 border-r border-gray-200 bg-white flex flex-col gap-2 absolute right-5 top-3 text-xs 2xl:text-sm z-10 rounded-lg shadow-lg transition-all duration-300`}
     >
       {isVisible && (
         <>
@@ -39,7 +39,7 @@ const ViewTitle = ({
           </div>
 
           <div
-            className={`w-full 2xl:h-fit md:h-20 py-1.5 z-10 ${
+            className={`w-full py-1.5 z-10 ${
               metadata.description ? "visible" : "invisible"
             }`}
             title={metadata.description}

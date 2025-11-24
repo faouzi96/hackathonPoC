@@ -2,10 +2,10 @@ import { generateText, ModelMessage } from "ai";
 import { systemMessage } from "../utils/systemMessage.js";
 import { llmConnection } from "../globals/llmConnection.js";
 
-async function queryProcessing(messages: ModelMessage[]) {
+async function queryProcessing(message: ModelMessage) {
   const finalResponse = await generateText({
-    model: llmConnection,
-    messages: messages,
+    model: llmConnection(),
+    prompt: JSON.stringify(message),
   });
 
   return finalResponse.content[0].type === "text"
@@ -14,13 +14,11 @@ async function queryProcessing(messages: ModelMessage[]) {
 }
 
 export async function getProjectStructure(jsonData: string) {
-  const messages: ModelMessage[] = [
-    {
-      role: "system",
-      content: systemMessage + jsonData,
-    },
-  ];
+  const message: ModelMessage = {
+    role: "system",
+    content: systemMessage + jsonData,
+  };
 
-  const response = await queryProcessing(messages);
+  const response = await queryProcessing(message);
   return response;
 }

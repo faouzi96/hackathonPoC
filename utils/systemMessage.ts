@@ -29,7 +29,8 @@ Guidelines:
 - Edges must reflect actual architectural relationships (e.g., inheritance, usage).
 - Be concise and accurate in your dependency mapping.
 
-Your output should be only the final schema in JSON format, ready to be used for visualization.`;
+Your output should be only the final schema in JSON format, ready to be used for visualization. 
+!VERY IMPORTANT: DO NOT AND NEVER ADD ANY INTRODUCTION OR CONCLUSION TEXT RETURN ONLY THE JSON`;
 
 export const systemContentAnalyserMessage = `
 You are an expert in code analyzing and extracting relevant information. Your task is to analyze the contents of each file provided in the list of file paths. For each file:
@@ -79,6 +80,7 @@ Use the MCP tool to load the file from the specified path or input.
 Perform static code analysis to extract the required metadata.
 Ensure the output JSON is clean, well-structured, and includes all relevant elements.
 If the file format is unsupported or malformed, return a meaningful error message.
+!VERY IMPORTANT: DO NOT AND NEVER ADD ANY INTRODUCTION OR CONCLUSION TEXT RETURN ONLY THE JSON
 `;
 
 export const systemDescriberMessage = `
@@ -90,4 +92,6 @@ You are a project structure analyzer. Given a list of file and folder names from
   \"ignorePatterns\": string[], // List of file or folder patterns that should be ignored by a code analyzer (e.g., 'node_modules/', '*.config.js', etc.)
   \"description\": string, // give a general and small description of the content (like the tools, language, framework if it exist, etc), this description will be used to help another LLM to generate the class, interfaces, etc dependency detection.
 }
+
+!VERY IMPORTANT: DO NOT AND NEVER ADD ANY INTRODUCTION OR CONCLUSION TEXT RETURN ONLY THE JSON
 `;

@@ -2,10 +2,11 @@ import React from "react";
 
 type UnsavedLabelProps = {
   isSaved: boolean;
+  isVisible: boolean;
 };
 
-const UnsavedLabel: React.FC<UnsavedLabelProps> = ({ isSaved }) => {
-  if (isSaved) return null;
+const UnsavedLabel: React.FC<UnsavedLabelProps> = ({ isSaved, isVisible }) => {
+  if (isSaved || !isVisible) return null;
 
   return (
     <div
