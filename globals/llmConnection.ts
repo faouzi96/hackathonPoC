@@ -24,19 +24,29 @@ export const azureLlmConnection = createAzure({
 const OPENAI_BASE_URL = getUserInfo("OPENAI_BASE_URL");
 const OPENAI_API_KEY = getUserInfo("OPENAI_API_KEY");
 const OPENAI_MODEL_NAME = getUserInfo("OPENAI_MODEL_NAME");
-export const openaiLlmConnection = createOpenAI({
-  baseURL: OPENAI_BASE_URL,
-  apiKey: OPENAI_API_KEY,
-})(OPENAI_MODEL_NAME);
+export const openaiLlmConnection =
+  OPENAI_BASE_URL !== "undefined"
+    ? createOpenAI({
+        baseURL: OPENAI_BASE_URL,
+        apiKey: OPENAI_API_KEY,
+      })(OPENAI_MODEL_NAME)
+    : createOpenAI({
+        apiKey: OPENAI_API_KEY,
+      })(OPENAI_MODEL_NAME);
 
 // Anthropic
 const ANTHROPIC_BASE_URL = getUserInfo("ANTHROPIC_BASE_URL");
 const ANTHROPIC_API_KEY = getUserInfo("ANTHROPIC_API_KEY");
 const ANTHROPIC_MODEL_NAME = getUserInfo("ANTHROPIC_MODEL_NAME");
-export const anthropicLlmConnection = createAnthropic({
-  baseURL: ANTHROPIC_BASE_URL,
-  apiKey: ANTHROPIC_API_KEY,
-})(ANTHROPIC_MODEL_NAME);
+export const anthropicLlmConnection =
+  ANTHROPIC_BASE_URL !== "undefined"
+    ? createAnthropic({
+        baseURL: ANTHROPIC_BASE_URL,
+        apiKey: ANTHROPIC_API_KEY,
+      })(ANTHROPIC_MODEL_NAME)
+    : createAnthropic({
+        apiKey: ANTHROPIC_API_KEY,
+      })(ANTHROPIC_MODEL_NAME);
 
 // Google Generative AI
 const GOOGLE_BASE_URL = getUserInfo("GOOGLE_BASE_URL");
@@ -70,16 +80,6 @@ export const ollamaLlmConnection =
         },
       })(OLLAMA_MODEL_NAME);
 
-// vLLM (local)
-const VLLM_BASE_URL = getUserInfo("VLLM_BASE_URL");
-const VLLM_MODEL_NAME = getUserInfo("VLLM_MODEL_NAME");
-const VLLM_KEY = getUserInfo("VLLM_API_KEY");
-const vllmProvider = createOpenAI({
-  baseURL: VLLM_BASE_URL,
-  apiKey: VLLM_KEY, // vLLM doesn't require API key for local instances
-});
-export const vllmLlmConnection = vllmProvider(VLLM_MODEL_NAME);
-
 // Method to get LLM connection based on provider name
 export function getLlmConnection(provider: LlmProvider) {
   switch (provider) {
@@ -93,8 +93,6 @@ export function getLlmConnection(provider: LlmProvider) {
       return googleLlmConnection;
     case "Ollama":
       return ollamaLlmConnection;
-    case "vllm":
-      return vllmLlmConnection;
     default:
       throw new Error(`Unknown LLM provider: ${provider}`);
   }
