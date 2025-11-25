@@ -2,8 +2,17 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import z from "zod";
-
 import { readFile } from "fs/promises";
+
+async function loadFileContent(path: string) {
+  try {
+    const content = await readFile(path, "utf-8");
+    return content;
+  } catch (err) {
+    console.error(`Failed to read file at ${path}:`, err);
+    return null;
+  }
+}
 
 const server = new McpServer({
   name: "local-project-inspector",
@@ -52,19 +61,7 @@ server.tool(
   }
 );
 
-async function main() {
+(async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-}
-
-main();
-
-async function loadFileContent(path: string) {
-  try {
-    const content = await readFile(path, "utf-8");
-    return content;
-  } catch (err) {
-    console.error(`Failed to read file at ${path}:`, err);
-    return null;
-  }
-}
+})();

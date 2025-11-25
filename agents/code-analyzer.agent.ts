@@ -6,15 +6,18 @@ import {
 import { Tool } from "@modelcontextprotocol/sdk/types.js";
 import { generateText, jsonSchema, ModelMessage, tool } from "ai";
 import { readdir } from "fs/promises";
-import path, { join, resolve } from "path";
-import { systemContentAnalyserMessage } from "../utils/systemMessage.js";
-import { Metadata } from "./projectDescriberAgent.js";
-import { llmConnection } from "../globals/llmConnection.js";
-import getMcpServerPath from "../utils/getMcpServerPath.js";
+import { join, resolve } from "path";
+import { LLMService } from "../services/llm.service.js";
+import {
+  getMcpServerPath,
+  systemContentAnalyserMessage,
+} from "../utils/index.js";
+import { Metadata } from "../types/app.types.js";
 
 export class CodeAnalyzerAgent {
   private mcpClient: Client;
   private transport: StdioClientTransport;
+  private llmService = new LLMService();
 
   constructor() {
     const mcpServerPath = getMcpServerPath();
@@ -75,7 +78,7 @@ export class CodeAnalyzerAgent {
     const messages: ModelMessage[] = [...query];
 
     const response = await generateText({
-      model: llmConnection(),
+      model: this.llmService.connection(),
       prompt: JSON.stringify(messages),
       tools: tools.reduce(
         (obj, t) => ({
@@ -125,7 +128,7 @@ export class CodeAnalyzerAgent {
         ];
 
         const finalResponse = await generateText({
-          model: llmConnection(),
+          model: this.llmService.connection(),
           prompt: JSON.stringify(newMessages),
           maxOutputTokens: 1000,
         });

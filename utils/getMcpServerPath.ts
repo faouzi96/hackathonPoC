@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import path from "path";
 import fs from "fs-extra";
 
-const getMcpServerPath = () => {
+export const getMcpServerPath = () => {
   try {
     const globalRoot = execSync("npm root", {
       stdio: ["ignore", "pipe", "ignore"],
@@ -39,5 +39,3 @@ const getMcpServerPath = () => {
     throw new Error("MCP server not found or failed to find it");
   }
 };
-
-export default getMcpServerPath;

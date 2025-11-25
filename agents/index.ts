@@ -1,3 +1,3 @@
-export * from "./projectDescriberAgent.js";
-export * from "./codeAnalyzerAgent.js";
-export * from "./graphAgent.js";
+export * from "./project-describer.agent.js";
+export * from "./code-analyzer.agent.js";
+export * from "./graph.agent.js";

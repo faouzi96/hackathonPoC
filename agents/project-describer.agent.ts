@@ -1,20 +1,15 @@
 import { generateText, ModelMessage } from "ai";
-import { systemDescriberMessage } from "../utils/systemMessage.js";
+import { systemDescriberMessage, parseLlmResponse } from "../utils/index.js";
 import { readdir } from "node:fs/promises";
-import { llmConnection } from "../globals/llmConnection.js";
-import { parseLlmResponse } from "../utils/parseLlmResponse.js";
-
-export type Metadata = {
-  projectType: string;
-  framework: string;
-  ignorePatterns: string[];
-  description: string;
-};
+import { LLMService } from "../services/llm.service.js";
+import { Metadata } from "../types/app.types.js";
 
 export class ProjectDescriberAgent {
+  private llmService = new LLMService();
+
   private async queryProcessing(message: ModelMessage) {
     const finalResponse = await generateText({
-      model: llmConnection(),
+      model: this.llmService.connection(),
       prompt: JSON.stringify(message),
     });
 

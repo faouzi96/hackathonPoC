@@ -1,11 +1,13 @@
 import { generateText, ModelMessage } from "ai";
-import { systemMessage } from "../utils/systemMessage.js";
-import { llmConnection } from "../globals/llmConnection.js";
+import { systemMessage } from "../utils/index.js";
+import { LLMService } from "../services/llm.service.js";
 
 export class GraphAgent {
+  private llmService = new LLMService();
+
   private async queryProcessing(message: ModelMessage) {
     const finalResponse = await generateText({
-      model: llmConnection(),
+      model: this.llmService.connection(),
       prompt: JSON.stringify(message),
     });
 
