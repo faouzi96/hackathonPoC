@@ -11,36 +11,38 @@ export type Metadata = {
   description: string;
 };
 
-async function queryProcessing(message: ModelMessage) {
-  const finalResponse = await generateText({
-    model: llmConnection(),
-    prompt: JSON.stringify(message),
-  });
+export class ProjectDescriberAgent {
+  private async queryProcessing(message: ModelMessage) {
+    const finalResponse = await generateText({
+      model: llmConnection(),
+      prompt: JSON.stringify(message),
+    });
 
-  return finalResponse.content[0].type === "text"
-    ? finalResponse.content[0].text
-    : "";
-}
+    return finalResponse.content[0].type === "text"
+      ? finalResponse.content[0].text
+      : "";
+  }
 
-export async function getProjectDescription(uri: string): Promise<Metadata> {
-  const files = (await getAllFilePaths(uri)).join("\n");
-  const fileContext = `\n\nList of the files:
+  public async getProjectDescription(uri: string): Promise<Metadata> {
+    const files = (await this.getAllFilePaths(uri)).join("\n");
+    const fileContext = `\n\nList of the files:
       \n${files}`;
-  const message: ModelMessage = {
-    role: "system",
-    content: systemDescriberMessage + fileContext,
-  };
+    const message: ModelMessage = {
+      role: "system",
+      content: systemDescriberMessage + fileContext,
+    };
 
-  const response = await queryProcessing(message);
-  return parseLlmResponse(response) as Metadata;
-}
+    const response = await this.queryProcessing(message);
+    return parseLlmResponse(response) as Metadata;
+  }
 
-async function getAllFilePaths(folderPath: string) {
-  try {
-    const files = await readdir(folderPath);
-    return files;
-  } catch (err) {
-    console.error("Error reading folder:", err);
-    return [];
+  private async getAllFilePaths(folderPath: string) {
+    try {
+      const files = await readdir(folderPath);
+      return files;
+    } catch (err) {
+      console.error("Error reading folder:", err);
+      return [];
+    }
   }
 }

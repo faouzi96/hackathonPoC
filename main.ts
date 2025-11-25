@@ -3,12 +3,6 @@
 import { writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getProjectStructure } from "./agents/graphAgent.js";
-import { localMcpClientCodeAnalyser } from "./agents/codeAnalyzerAgent.js";
-import {
-  getProjectDescription,
-  Metadata,
-} from "./agents/projectDescriberAgent.js";
 import { projectInfoCollector } from "./services/projectInfoCollector.js";
 import { userInfoCollector } from "./services/userInfoCollector.js";
 import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
@@ -22,6 +16,12 @@ import "dotenv/config";
 import { select } from "@inquirer/prompts";
 import { deleteRepo } from "./services/gitRepoManager.js";
 import { parseLlmResponse } from "./utils/parseLlmResponse.js";
+import {
+  CodeAnalyzerAgent,
+  GraphAgent,
+  Metadata,
+  ProjectDescriberAgent,
+} from "./agents/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,8 +35,8 @@ const describerAgentRunnable = RunnableLambda.from(async (uri: string) => {
   );
   if (process.env.NODE_ENV === "development")
     return { uri, metadata: describerAgentResponse };
-
-  const metadata = await getProjectDescription(uri);
+  const describerAgent = new ProjectDescriberAgent();
+  const metadata = await describerAgent.getProjectDescription(uri);
   return { uri, metadata };
 });
 
@@ -51,8 +51,11 @@ const codeAnalyzerAgentRunnable = RunnableLambda.from(
         data: codeAnalyzerAgentResponse,
         metadata: describerAgentResponse,
       };
-
-    const data = await localMcpClientCodeAnalyser(args.uri, args.metadata);
+    const codeAnalyzerAgent = new CodeAnalyzerAgent();
+    const data = await codeAnalyzerAgent.localMcpClientCodeAnalyser(
+      args.uri,
+      args.metadata
+    );
     return { data: data, metadata: args.metadata };
   }
 );
@@ -68,8 +71,8 @@ const graphAgentRunnable = RunnableLambda.from(
         graph: JSON.stringify(graphAgentResponse),
         metadata: describerAgentResponse,
       };
-
-    const graph = await getProjectStructure(agrs.data);
+    const graphAgent = new GraphAgent();
+    const graph = await graphAgent.getProjectStructure(agrs.data);
     return { graph: graph, metadata: agrs.metadata };
   }
 );
