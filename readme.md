@@ -14,7 +14,7 @@ This README focuses on how to set up and run the project locally, what the major
 - `api/` — NestJS backend serving `api/*` endpoints. Entry at `api/src`.
 - `files-storage/` — persisted JSON files created by the API (flow JSON files).
 - `flowData.json` — summary/registry of flows (used by the API service).
-- `creds/` — local credentials files (not in source control). Files present in this repo include `AZURE_AI_ENDPOINT`, `AZURE_AI_KEY`, `AZURE_MODEL_NAME`, `AZURE_DEPLOYMENT_NAME`, `AZURE_RESOURCE_NAME`, `AZURE_AI_API_VERSION`.
+- `.flow-analyzer-creds/` — local folder in your home directory contains credentials files (not included in source control). Files present in this repo include e.g. `AZURE_AI_ENDPOINT`, `AZURE_AI_KEY`, `AZURE_MODEL_NAME`, `AZURE_DEPLOYMENT_NAME`, `AZURE_RESOURCE_NAME`, `AZURE_AI_API_VERSION` ...etc.
 - `globals/`, `agents/`, `services/`, `utils/` — helper code used by the app components and server.
 
 > Note: `node_modules/`, build artifacts (`dist/`, `build/`), and `coverage/` should be ignored in VCS. The repository already contains source for both client and API; compiled output is produced by their respective build steps.
@@ -53,7 +53,7 @@ Start the Application in one terminal:
 PowerShell:
 
 ```powershell
-npm run dev
+npm run start:dev
 ```
 
 The API listens by default on port `3001` (see `api/src/main.ts`) and sets the global prefix to `/api`, which renders the built version of the UI with it.
@@ -67,7 +67,7 @@ By default Vite serves the client (when ran as standalone application) on `http:
 To run the compiled full Application in production mode:
 
 ```powershell
-npm run start
+npm run start:prod
 ```
 
 The above script is building the Client, Api, and the main application, before running the resulted main application.
@@ -79,7 +79,7 @@ There is a root script that packages the application into a distributable tarbal
 PowerShell:
 
 ```powershell
-npm run app:package
+npm run app:pack
 ```
 
 What it does (high level): builds the TypeScript code, runs any packaging/pre-package steps and produces a packaged artifact that includes the pieces needed to run the analyzer and the UI. Check `local-scripts/package-app.js` for the exact packaging behavior.
@@ -117,14 +117,6 @@ If you remove or move these files manually, the API will reflect those changes (
 The project contains a `creds/` folder used to store local secrets used for LLM connection. Do not commit real secrets to VCS — prefer environment variables or a secrets manager in CI.
 
 If your runtime requires environment variables, you can export them in PowerShell like this:
-
----
-
-## Environment Variable
-
-To be able to run the project in a dev mode, a `.env` or a node environment variable must be present:
-
-`NODE_ENV="development"`
 
 ---
 
