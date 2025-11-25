@@ -29,3 +29,10 @@ export type UserInfo =
   | "VLLM_BASE_URL"
   | "VLLM_MODEL_NAME"
   | "VLLM_API_KEY";
+
+export type Metadata = {
+  projectType: string;
+  framework: string;
+  ignorePatterns: string[];
+  description: string;
+};
