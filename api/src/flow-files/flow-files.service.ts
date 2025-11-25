@@ -4,8 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { createHash } from 'crypto';
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs-extra';
+import path from 'path';
 import { FlowDataService } from 'src/flow-data/flow-data.service';
 import { FlowData } from 'types/app.types';
 
@@ -81,11 +81,15 @@ export class FlowFilesService {
         dateTime: isoDate,
       });
 
+      // Create the files=storage folder if it does not exist
+      const storagePath = path.resolve(process.cwd(), ...FOLDER_PATH);
+      fs.existsSync(storagePath) || (await fs.promises.mkdir(storagePath));
+
       // Final file name with .json extension
       const fileName = `${hashedName}.json`;
 
       // Static relative path: go up one level and then into 'data' folder
-      const fullPath = path.resolve(process.cwd(), ...FOLDER_PATH, fileName);
+      const fullPath = path.resolve(storagePath, fileName);
 
       // Convert data to JSON string
       const jsonContent = JSON.stringify(data, null, 2);

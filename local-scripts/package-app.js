@@ -70,8 +70,6 @@ async function packageApp() {
 
     console.log("✅ Orchestrator and client build completed successfully.");
 
-    console.log("📦 Packing the application...");
-
     await fs.copy(
       path.join(rootDir, "package.json"),
       path.join(buildDir, "package.json")
@@ -82,6 +80,7 @@ async function packageApp() {
     );
 
     console.log("✅ Application ready to be packaged!");
+    console.log("📦 Packing the application...");
   } catch (error) {
     console.error("❌ Build failed:", error);
     process.exit(1);

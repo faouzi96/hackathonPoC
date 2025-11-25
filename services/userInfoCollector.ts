@@ -2,8 +2,17 @@ import { confirm, input, select } from "@inquirer/prompts";
 import { LocalStorage } from "node-localstorage";
 import { LMM_CONNECTION_PARAMS } from "../utils/constants.js";
 import { UserInfo } from "../types/app.types.js";
+import path from "path";
+import { homedir } from "os";
+import fs from "fs-extra";
 
-const localStorage = new LocalStorage("./creds");
+const storagePath = path.join(homedir(), ".flow-analyzer-creds");
+if (!fs.existsSync(storagePath)) {
+  fs.mkdirSync(storagePath, { recursive: true });
+}
+
+// Use OS temp directory or a custom folder
+const localStorage = new LocalStorage(storagePath);
 
 export function saveUserInfo(key: UserInfo, value: string): void {
   localStorage.setItem(key, value);

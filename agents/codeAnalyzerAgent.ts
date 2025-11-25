@@ -1,16 +1,35 @@
 import { Client } from "@modelcontextprotocol/sdk/client";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import {
+  StdioClientTransport,
+  StdioServerParameters,
+} from "@modelcontextprotocol/sdk/client/stdio.js";
 import { Tool } from "@modelcontextprotocol/sdk/types.js";
 import { generateText, jsonSchema, ModelMessage, tool } from "ai";
 import { readdir } from "fs/promises";
-import { join, resolve } from "path";
+import path, { join, resolve } from "path";
 import { systemContentAnalyserMessage } from "../utils/systemMessage.js";
 import { Metadata } from "./projectDescriberAgent.js";
 import { llmConnection } from "../globals/llmConnection.js";
+import getMcpServerPath from "../utils/getMcpServerPath.js";
+
+const mcpServerPath = getMcpServerPath();
+
+const transportConfig: StdioServerParameters =
+  process.env.NODE_ENV === "development"
+    ? {
+        command: "npm",
+        args: ["run", "mcp:server:dev"],
+        stderr: "ignore",
+      }
+    : {
+        command: "node",
+        args: [mcpServerPath],
+        stderr: "inherit",
+      };
 
 const mcpClient = new Client(
   {
-    name: "github-mcp-client",
+    name: "file-reader-mcp-client",
     version: "1.0.0",
   },
   {
@@ -18,14 +37,10 @@ const mcpClient = new Client(
       sampling: {},
     },
     enforceStrictCapabilities: true,
-  },
+  }
 );
 
-const transport = new StdioClientTransport({
-  command: "npm",
-  args: ["run", "mcp:server:dev"],
-  stderr: "ignore",
-});
+const transport = new StdioClientTransport(transportConfig);
 
 async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
   const messages: ModelMessage[] = [...query];
@@ -47,7 +62,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
           },
         }),
       }),
-      {},
+      {}
     ),
   });
 
@@ -66,7 +81,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
       });
 
       console.log(
-        `[Calling tool ${toolName} with arguments: ${toolArgs?.path}]`,
+        `[Calling tool ${toolName} with arguments: ${toolArgs?.path}]`
       );
       const newMessages: ModelMessage[] = [
         ...messages,
@@ -89,7 +104,7 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
       finalText.push(
         finalResponse.content[0].type === "text"
           ? finalResponse.content[0].text
-          : "",
+          : ""
       );
     }
   }
@@ -99,10 +114,10 @@ async function queryProcessing(query: ModelMessage[], tools: Tool[]) {
 
 export async function localMcpClientCodeAnalyser(
   uri: string,
-  metadata: Metadata,
+  metadata: Metadata
 ) {
   const files = (await getAllFilePaths(uri, metadata.ignorePatterns)).join(
-    "\n",
+    "\n"
   );
   const fileContext = `\n\nList of the files:
   \n${files}`;
@@ -129,7 +144,7 @@ export async function localMcpClientCodeAnalyser(
 
 async function getAllFilePaths(
   folderPath: string,
-  ignorePatterns: string[] = [],
+  ignorePatterns: string[] = []
 ) {
   const result: string[] = [];
 
