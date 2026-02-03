@@ -23,7 +23,7 @@ export class UserDataCollectorService {
 
     if (!this.checkUserInfoExists()) {
       console.log(
-        "User information is incomplete. Please provide the missing information."
+        "User information is incomplete. Please provide the missing information.",
       );
       await this.collectProviderData(provider);
     } else {
@@ -67,7 +67,7 @@ export class UserDataCollectorService {
   private checkUserInfoExists(): boolean {
     const provider = this.storageService.getUserInfo("PROVIDER");
     const requiredKeys: UserInfo[] = LMM_CONNECTION_PARAMS.filter((key) =>
-      key.includes(provider.toUpperCase())
+      key.includes(provider.toUpperCase()),
     ) as UserInfo[];
 
     for (const key of requiredKeys) {
@@ -111,13 +111,13 @@ export class UserDataCollectorService {
           break;
         }
         case "Google": {
-          const baseURL = await input({
+          const baseURLInput = await input({
             message:
               "[Optional] Enter your Gemini Endpoint (default: https://generativelanguage.googleapis.com/v1beta/models/):",
           });
           this.storageService.saveUserInfo(
             "GOOGLE_BASE_URL",
-            baseURL ?? "undefined"
+            baseURLInput || "undefined",
           );
 
           const apiKey = await input({
@@ -138,7 +138,7 @@ export class UserDataCollectorService {
           });
           this.storageService.saveUserInfo(
             "OLLAMA_BASE_URL",
-            baseURL ?? "undefined"
+            baseURL || "undefined",
           );
 
           const apiKey = await input({
@@ -147,7 +147,7 @@ export class UserDataCollectorService {
           });
           this.storageService.saveUserInfo(
             "OLLAMA_API_KEY",
-            apiKey ?? "undefined"
+            apiKey || "undefined",
           );
 
           const model = await input({
@@ -163,7 +163,7 @@ export class UserDataCollectorService {
           });
           this.storageService.saveUserInfo(
             "ANTHROPIC_BASE_URL",
-            baseURL ?? "undefined"
+            baseURL || "undefined",
           );
 
           const apiKey = await input({
@@ -184,7 +184,7 @@ export class UserDataCollectorService {
           });
           this.storageService.saveUserInfo(
             "OPENAI_BASE_URL",
-            baseURL ?? "undefined"
+            baseURL || "undefined",
           );
 
           const apiKey = await input({
