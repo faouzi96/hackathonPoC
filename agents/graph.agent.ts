@@ -1,26 +1,19 @@
-import { generateText, ModelMessage } from "ai";
+import { SystemMessage } from "@langchain/core/messages";
 import { systemMessage } from "../utils/index.js";
 import { LLMService } from "../services/llm.service.js";
 
 export class GraphAgent {
   private llmService = new LLMService();
 
-  private async queryProcessing(message: ModelMessage) {
-    const finalResponse = await generateText({
-      model: this.llmService.connection(),
-      prompt: JSON.stringify(message),
-    });
+  private async queryProcessing(content: string) {
+    const model = this.llmService.connection();
+    const response = await model.invoke([new SystemMessage(content)]);
 
-    return finalResponse.content[0].type === "text"
-      ? finalResponse.content[0].text
-      : "";
+    return response.content as string;
   }
 
   public async getProjectStructure(jsonData: string) {
-    const message: ModelMessage = {
-      role: "system",
-      content: systemMessage + jsonData,
-    };
+    const message = systemMessage + jsonData;
 
     const response = await this.queryProcessing(message);
     return response;

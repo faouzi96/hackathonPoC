@@ -1,4 +1,4 @@
-import { generateText, ModelMessage } from "ai";
+import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { systemDescriberMessage, parseLlmResponse } from "../utils/index.js";
 import { readdir } from "node:fs/promises";
 import { LLMService } from "../services/llm.service.js";
@@ -7,25 +7,18 @@ import { Metadata } from "../types/app.types.js";
 export class ProjectDescriberAgent {
   private llmService = new LLMService();
 
-  private async queryProcessing(message: ModelMessage) {
-    const finalResponse = await generateText({
-      model: this.llmService.connection(),
-      prompt: JSON.stringify(message),
-    });
+  private async queryProcessing(content: string) {
+    const model = this.llmService.connection();
+    const response = await model.invoke([new SystemMessage(content)]);
 
-    return finalResponse.content[0].type === "text"
-      ? finalResponse.content[0].text
-      : "";
+    return response.content as string;
   }
 
   public async getProjectDescription(uri: string): Promise<Metadata> {
     const files = (await this.getAllFilePaths(uri)).join("\n");
     const fileContext = `\n\nList of the files:
       \n${files}`;
-    const message: ModelMessage = {
-      role: "system",
-      content: systemDescriberMessage + fileContext,
-    };
+    const message = systemDescriberMessage + fileContext;
 
     const response = await this.queryProcessing(message);
     return parseLlmResponse(response) as Metadata;

@@ -17,6 +17,18 @@ const __dirname = path.dirname(__filename);
 const publicPath = path.join(__dirname, "client", "dist", "data.json");
 
 async function main() {
+  console.log(`
+    _______ _               _                _                     
+   |  ___| |             / \\              | |                    
+   | |_  | | _____      _/ _ \\ _ __   __ _| |_   _ _______ _ __ 
+   |  _| | |/ _ \\ \\ /\\ / / ___ \\ '_ \\ / _\` | | | | |_  / _ \\ '__|
+   | |   | | (_) \\ V  V / /   \\ \\ | | (_| | | |_| |/ /  __/ |   
+   \\_|   |_|\\___/ \\_/\\_/_/     \\_\\_|\\__,_|_|\\__, /___\\___|_|   
+                                              __/ |              
+                                             |___/               
+    Welcome!
+  `);
+
   const userInfoCollectorService = new UserDataCollectorService();
   const gitService = new GitService();
 
@@ -53,14 +65,14 @@ async function main() {
           graph: parseLlmResponse(response.graph),
         },
         null,
-        2
-      )
+        2,
+      ),
     );
   }
 
   console.log(
     "\x1b[32m%s\x1b[0m",
-    "🌐 FlowAnalyzer Server Running on: http://localhost:3001"
+    "🌐 FlowAnalyzer Server Running on: http://localhost:3001",
   );
 
   execSync("npm run start:prod", { cwd: path.join(__dirname, "api") });
